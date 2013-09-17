@@ -158,6 +158,10 @@ public class MonsterInfo {
 		return ret;
 	}
 	
+	/**
+	 * 实例化一个怪物
+	 * @return 生成出的monster实例
+	 */
 	public Monster create(){
 		Monster monster=new Monster(name, hp, mp, atk, def, agi, jink, inte, exp, gold, resists, actions, actmode);
 //		monster.init(name, hp, mp, atk, def, agi, jink, inte, exp, gold, resists, actions, actmode);
@@ -168,6 +172,10 @@ public class MonsterInfo {
 		PullHandler.initMonsters(); //MonsterInfoList
 	}
 	
+	/**
+	 * 按照编号实例化一个怪物
+	 * @return 生成出的monster实例
+	 */
 	public static Monster create(int id){
 		if (monsterInfoList==null) return null;
 		return monsterInfoList[id].create();

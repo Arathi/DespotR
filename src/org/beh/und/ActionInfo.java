@@ -73,7 +73,6 @@ public class ActionInfo {
 		}
 	}
 	
-	@Deprecated
 	public static int getActionId(String actionString){
 		int actionIndex=actionStringMap.get(actionString);
 		int actionId=actionInfoList[actionIndex].actionId;
@@ -81,7 +80,6 @@ public class ActionInfo {
 	}
 	
 	public static ActionInfo getActionInfo(int actionId) {
-		// TODO Auto-generated method stub
 		int actionIndex=actionIdMap.get(actionId);
 		ActionInfo actionInfo=actionInfoList[actionIndex];
 		return actionInfo;
@@ -121,9 +119,14 @@ public class ActionInfo {
 	public int getCode(){
 		return code;
 	}
+
 	@Deprecated
 	public String getCodeStr(){
 		return codeStr;
+	}
+	
+	public int getSpellCode() {
+		return spellCode;
 	}
 	
 	public String toString(){

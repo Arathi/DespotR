@@ -20,7 +20,19 @@ public class SpellSystem {
 
 	public static void execute(Order order) {
 		// TODO 咒文处理
-		int spellCode=order.getSpellCode();
+		int spellCode=order.action.getSpellCode();
 		System.out.println("咒文处理: "+spellCode);
+		if (spellCode==ORDER_CODE_SPELL_FIRE){
+			
+		}
+		if (spellCode==ORDER_CODE_SPELL_HEAL){
+			
+		}
+		if (spellCode==ORDER_CODE_SPELL_SLEEP){
+			
+		}
+		if (spellCode==ORDER_CODE_SPELL_SILENCE){
+			
+		}
 	}
 }

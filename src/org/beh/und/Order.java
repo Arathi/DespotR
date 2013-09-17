@@ -22,7 +22,7 @@ public class Order implements Comparable<Order>{
 	//protected int type;
 	//protected int actionId;
 	protected int param;
-	protected int spellCode;
+	//protected int spellCode;
 	
 	protected int agi;
 	
@@ -61,10 +61,10 @@ public class Order implements Comparable<Order>{
 	public int compareTo(Order other) {
 		// TODO Auto-generated method stub
 		if (agi>other.getAgi()){
-			return 1;
+			return -1;
 		}
 		else if (agi<other.getAgi()) {
-			return -1;
+			return +1;
 		}
 		return 0;
 	}
@@ -74,8 +74,11 @@ public class Order implements Comparable<Order>{
 	 * 结果保存到结果表(results)中
 	 */
 	public void execute(){
-		//TODO 实现 命令的执行
+		//TODO 实现 命令的执行(完善逃跑，实现魔法)
 		results=new ArrayList<Result>();
+		if (src.isCanNotBattle()){
+			return;
+		}
 		int orderCode=action.getCode();
 		switch (orderCode){
 		case ORDER_CODE_ATTACK:
@@ -83,30 +86,34 @@ public class Order implements Comparable<Order>{
 			src.attack(target);
 			break;
 		case ORDER_CODE_DEFENCE:
-			//src.defence();
-			System.out.println(src.getName()+"防御(未实现)");
+			System.out.println("正在防御中...");
 			break;
 		case ORDER_CODE_RUN:
-			//src.run();
-			System.out.println(src.getName()+"逃跑(未实现)");
+			src.run();
+			System.out.println(src.getName()+"逃跑");
 			break;
 		case ORDER_CODE_SPELL:
-			System.out.println(src.getName()+"施放魔法(未实现)");
-//			SpellSystem.execute(this);
+			//;
+			SpellSystem.execute(this);
 			break;
 		}
 	}
 	
 	@Override
 	public String toString(){
-		String info=src+": "+action;
+		String info=src+": ["+agi+"] "+action;
 		return info;
 	}
 
-	public int getSpellCode() {
-		// TODO Auto-generated method stub
-		return spellCode;
-//		return 0;
+	public void pretreatment() {
+		// TODO 添加更多预处理（目前只有防御需要预处理）
+		int orderCode=action.getCode();
+		switch (orderCode){
+		case ORDER_CODE_DEFENCE:
+			System.out.println(src.getName()+"调整为防御姿态");
+			src.defence();
+			break;
+		}
 	}
 	
 }

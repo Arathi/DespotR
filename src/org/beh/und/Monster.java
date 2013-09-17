@@ -17,6 +17,11 @@ public class Monster extends Unit {
 		System.out.println("创建Monster："+this.toString());
 	}
 	
+	/**
+	 * 初始化怪物的AI
+	 * @param actionMode 行动模式
+	 * @param actions 动作表
+	 */
 	public void initAI(int actionMode, int[] actions){
 		actionListSize=actions.length;
 		this.actionMode=actionMode;
@@ -103,15 +108,15 @@ public class Monster extends Unit {
 //		ActionInfo actionInfo = ActionInfo.getActionInfo(actionId);
 		int targetSide = actionInfo.getTargetUnitSide();
 		if (targetSide==ActionInfo.TARGET_TYPE_ENEMY){
-			System.out.println("选择敌人为目标");
+			//System.out.println("选择敌人为目标");
 			target = enemy;
 		}
 		else if (targetSide==ActionInfo.TARGET_TYPE_ALLY){
-			System.out.println("选择自己为目标");
+			//System.out.println("选择自己为目标");
 			target = this;
 		}
 		else {
-			System.out.println("没有选择目标");
+			//System.out.println("没有选择目标");
 			target = null;
 		}
 		return target;

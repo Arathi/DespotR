@@ -1,6 +1,5 @@
 package org.beh.und;
 
-import java.awt.peer.SystemTrayPeer;
 import java.util.Random;
 
 /**

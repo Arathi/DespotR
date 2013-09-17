@@ -251,7 +251,7 @@
 <id>No.009</id>
 <name>メトロゴースト</name>
 <enname>Metoro Ghost</enname>
-<cnname>恶灵</cnname>
+<cnname>怨灵</cnname>
 <hp>23</hp>
 <mp>10</mp>
 <atk>18</atk>
@@ -435,6 +435,7 @@
 <icon>Monster/SFC/No.015.gif</icon>
 <id>No.015</id>
 <name>リカント</name>
+<enname>Bewarewolf</enname>
 <cnname>兽人</cnname>
 <hp>34</hp>
 <mp>0</mp>
@@ -528,7 +529,7 @@
 <id>No.018</id>
 <name>ヘルゴースト</name>
 <enname>Hell Ghost</enname>
-<cnname>地狱幽灵</cnname>
+<cnname>地狱幽魂</cnname>
 <hp>33</hp>
 <mp>14</mp>
 <atk>40</atk>
@@ -558,6 +559,7 @@
 <icon>Monster/SFC/No.019.gif</icon>
 <id>No.019</id>
 <name>リカントマムル</name>
+<enname>Scarewolf</enname>
 <cnname>封魔兽人</cnname>
 <hp>38</hp>
 <mp>6</mp>
@@ -893,6 +895,7 @@
 <icon>Monster/SFC/No.030.gif</icon>
 <id>No.030</id>
 <name>キラーリカント</name>
+<enname>Tearwolf</enname>
 <name>兽人杀手</name>
 <hp>60</hp>
 <mp>0</mp>
