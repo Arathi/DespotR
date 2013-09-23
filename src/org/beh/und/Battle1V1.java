@@ -60,7 +60,6 @@ public class Battle1V1 {
 		//ÃüÁîÔ¤´¦Àí
 		for (i=0; i<orderList.size(); i++){
 			Order order = orderList.get(i);
-			//if (order.action.getCode())
 			order.pretreatment();
 		}
 		//Ö´ĞĞÃüÁî

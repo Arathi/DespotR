@@ -7,6 +7,7 @@ public class SpellSystem {
 	public static final int ORDER_CODE_SPELL_HEAL=12;
 	public static final int ORDER_CODE_SPELL_SLEEP=13;
 	public static final int ORDER_CODE_SPELL_SILENCE=14;
+	public static final int ORDER_CODE_SPELL_DRAGONFIRE=21;
 	
 	public static Map<String,Integer> SpellCodeMap;
 	
@@ -16,11 +17,13 @@ public class SpellSystem {
 		SpellCodeMap.put("heal", ORDER_CODE_SPELL_HEAL);
 		SpellCodeMap.put("sleep", ORDER_CODE_SPELL_SLEEP);
 		SpellCodeMap.put("silence", ORDER_CODE_SPELL_SILENCE);
+		SpellCodeMap.put("dragonfire", ORDER_CODE_SPELL_DRAGONFIRE);
 	}
 
 	public static void execute(Order order) {
 		// TODO 咒文处理
-		int spellCode=order.action.getSpellCode();
+		SkillInfo info=(SkillInfo) order.action;
+		int spellCode=info.getParam();
 		System.out.println("咒文处理: "+spellCode);
 		if (spellCode==ORDER_CODE_SPELL_FIRE){
 			
@@ -32,6 +35,9 @@ public class SpellSystem {
 			
 		}
 		if (spellCode==ORDER_CODE_SPELL_SILENCE){
+			
+		}
+		if (spellCode==ORDER_CODE_SPELL_DRAGONFIRE){
 			
 		}
 	}

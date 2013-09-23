@@ -7,6 +7,7 @@ public class UndConsole {
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 		ActionInfo.init();
+		SkillInfo.init();
 		MonsterInfo.init();
 		
 		Monster monsterA=MonsterInfo.create(37);

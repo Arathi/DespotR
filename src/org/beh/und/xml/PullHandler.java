@@ -17,16 +17,16 @@ import java.util.*;
  * @author Arathi
  *
  */
-public class PullHandler {
+public class PullHandler extends XMLHandler {
 	// XmlPullParser parser;
 	//public static ;
-
-
+	
 	/**
 	 * 初始化怪物信息
 	 * @return 成功返回获取到的怪物信息数量
 	 */
-	public static int initMonsters() {
+	@Override
+	public int initMonsters() {
 		ArrayList<MonsterInfo> monster_info_list=null;
 		try {
 			// 建立XmlPullParser
@@ -48,12 +48,12 @@ public class PullHandler {
 			parser.setInput(reader);
 			int eventType = parser.getEventType();
 			String name;
-			String resistType;
-			int resistIndex = 0;
-			int actionOrder;
-			String strValue;
-			int intValue;
-			String resistStr = null, resistMaxStr=null;
+//			String resistType;
+//			int resistIndex = 0;
+//			int actionOrder;
+//			String strValue;
+//			int intValue;
+//			String resistStr = null, resistMaxStr=null;
 			while (eventType != XmlPullParser.END_DOCUMENT) {
 				switch (eventType) {
 				case XmlPullParser.START_DOCUMENT:
@@ -63,93 +63,12 @@ public class PullHandler {
 					break;
 				case XmlPullParser.START_TAG:
 					name = parser.getName();
-					//System.out.println("标签" + name + "开始");
-					if (name.equals("monster")){
-						monsterInfo=new MonsterInfo();
-					}
-					if (name.equals("id")){
-						strValue = parser.nextText().substring(3);
-						intValue = Util.toInteger(strValue);
-						monsterInfo.setId(intValue);
-					}
-					if (name.endsWith("name")){
-						strValue = parser.nextText();
-						monsterInfo.setName(strValue);
-					}
-					if (name.equals("hp")){
-						intValue = Util.toInteger(parser.nextText());
-						monsterInfo.setHp(intValue);
-					}
-					if (name.equals("mp")){
-						intValue = Util.toInteger(parser.nextText());
-						monsterInfo.setMp(intValue);
-					}
-					if (name.equals("atk")){
-						intValue = Util.toInteger(parser.nextText());
-						monsterInfo.setAtk(intValue);
-					}
-					if (name.equals("def")){
-						intValue = Util.toInteger(parser.nextText());
-						monsterInfo.setDef(intValue);
-					}
-					if (name.equals("agi")){
-						intValue = Util.toInteger(parser.nextText());
-						monsterInfo.setAgi(intValue);
-					}
-					if (name.equals("jink")){
-						intValue = Util.toInteger(parser.nextText());
-						monsterInfo.setJink(intValue);
-					}
-					if (name.equals("inte")){
-						intValue = Util.toInteger(parser.nextText());
-						monsterInfo.setInte(intValue);
-					}
-					if (name.equals("exp")){
-						intValue = Util.toInteger(parser.nextText());
-						monsterInfo.setExp(intValue);
-					}
-					if (name.equals("gold")){
-						intValue = Util.toInteger(parser.nextText());
-						monsterInfo.setGold(intValue);
-					}
-					if (name.startsWith("resist")){
-						resistType=name.substring(6);
-						String resistPair=parser.nextText();
-						//intValue=toInteger();
-						if (resistType.equals("gira")){
-							resistIndex=1;
-						}
-						if (resistType.equals("rariho")){
-							resistIndex=2;
-						}
-						if (resistType.equals("mahoton")){
-							resistIndex=3;
-						}
-						if (resistIndex>0){
-							int delimter_index= resistPair.indexOf('/');
-							if (delimter_index>=0 && delimter_index<resistPair.length()){
-								resistStr=resistPair.substring(0, delimter_index);
-								resistMaxStr=resistPair.substring(delimter_index+1);
-								monsterInfo.setResist(resistIndex, Util.toInteger(resistStr), Util.toInteger(resistMaxStr));
-							}
-						}
-					}
-					if (name.startsWith("action")){
-						actionOrder=Util.toInteger(name.substring(6));
-						if (actionOrder>0 || actionOrder<=8){
-							strValue = parser.nextText();
-							monsterInfo.setActionString(actionOrder-1, strValue);
-							intValue = ActionInfo.getActionId(strValue);
-							monsterInfo.setAction(actionOrder-1, intValue);
-						}
-					}
-					if (name.equals("actmode")){
-						strValue=parser.nextText();
-						if (strValue.equals("random")){
-							monsterInfo.setActmode(MonsterInfo.ACTION_MODE_RANDOM);
+					if (name.equals("monsterlist")==false){
+						if (name.equals("monster")){
+							monsterInfo=new MonsterInfo();
 						}
 						else{
-							monsterInfo.setActmode(MonsterInfo.ACTION_MODE_FIXED);
+							setMonsterParam(monsterInfo, name, parser.nextText());
 						}
 					}
 					break;
@@ -198,7 +117,8 @@ public class PullHandler {
 	 * 初始化动作信息
 	 * @return 成功返回获取到的动作信息数量
 	 */
-	public static int initActions(){
+	@Override
+	public int initActions(){
 		ArrayList<ActionInfo> action_info_list=null;
 		try {
 			// 建立XmlPullParser
@@ -220,8 +140,8 @@ public class PullHandler {
 			parser.setInput(reader);
 			int eventType = parser.getEventType();
 			String name;
-			int id;
-			String strValue;
+//			int id;
+//			String strValue;
 			while (eventType != XmlPullParser.END_DOCUMENT) {
 				switch (eventType) {
 				case XmlPullParser.START_DOCUMENT:
@@ -230,53 +150,14 @@ public class PullHandler {
 					break;
 				case XmlPullParser.START_TAG:
 					name = parser.getName();
-					if (name.equals("action")){
-						actionInfo=new ActionInfo();
-					}
-					if (name.equals("id")){
-						id=Util.toInteger(parser.nextText());
-						actionInfo.setActionId(id);
-					}
-					if (name.equals("string")){
-						strValue=parser.nextText();
-						actionInfo.setActionString(strValue);
-					}
-					if (name.equals("name")){
-						strValue=parser.nextText();
-						actionInfo.setName(strValue);
-					}
-					if (name.equals("desc")){
-						strValue=parser.nextText();
-						actionInfo.setDescription(strValue);
-					}
-					if (name.equals("code")){
-						strValue=parser.nextText();
-						actionInfo.setCode(strValue);
-					}
-					if (name.equals("type")){
-						strValue=parser.nextText();
-						String[] targetTypes=strValue.split(",");
-						//actionInfo.setDescription(strValue);
-						int i, size=targetTypes.length;
-						for (i=0; i<size; i++){
-							if (targetTypes[i].equals("enemy")){
-								actionInfo.setTargetUnitSide(ActionInfo.TARGET_TYPE_ENEMY);
-							}
-							if (targetTypes[i].equals("ally")){
-								actionInfo.setTargetUnitSide(ActionInfo.TARGET_TYPE_ALLY);
-							}
-							if (targetTypes[i].equals("none")){
-								actionInfo.setTargetUnitSide(ActionInfo.TARGET_TYPE_NONE);
-							}
-							if (targetTypes[i].equals("single")){
-								actionInfo.setTargetRange(ActionInfo.TARGET_RANGE_SINGlE);
-							}
-							if (targetTypes[i].equals("team")){
-								actionInfo.setTargetRange(ActionInfo.TARGET_RANGE_TEAM);
-							}
-							if (targetTypes[i].equals("all")){
-								actionInfo.setTargetRange(ActionInfo.TARGET_RANGE_ALL);
-							}
+					//System.out.println(name);
+					if (name.equals("actionlist")==false){
+						if (name.equals("action")){
+							//System.out.println("新建Action");
+							actionInfo=new ActionInfo();
+						}
+						else{
+							setActionParam(actionInfo, name, parser.nextText());
 						}
 					}
 					break;
@@ -317,4 +198,88 @@ public class PullHandler {
 		return actionAmount;
 	}
 
+	/**
+	 * 初始化动作信息
+	 * @return 成功返回获取到的动作信息数量
+	 */
+	@Override
+	public int initSkills(){
+		ArrayList<SkillInfo> skill_info_list=null;
+		try {
+			// 建立XmlPullParser
+			XmlPullParserFactory pullFactory;
+			pullFactory = XmlPullParserFactory.newInstance();
+			
+			SkillInfo skillInfo=null;
+
+			XmlPullParser parser = pullFactory.newPullParser();
+			// 设置输入xml文件
+			String resource = "/skill.xml";
+			java.net.URL configFileResource = PullHandler.class
+					.getResource(resource);
+			URI uri = configFileResource.toURI();
+			File file = new File(uri); // new File(resource);
+			FileInputStream istream= new FileInputStream(file);
+			InputStreamReader reader=new InputStreamReader(istream, "UTF-8");
+			
+			parser.setInput(reader);
+			int eventType = parser.getEventType();
+			String name;
+			while (eventType != XmlPullParser.END_DOCUMENT) {
+				switch (eventType) {
+				case XmlPullParser.START_DOCUMENT:
+					skill_info_list=new ArrayList<SkillInfo>();
+					skill_info_list.add(null);
+					break;
+				case XmlPullParser.START_TAG:
+					name = parser.getName();
+					if (name.equals("skilllist")==false){
+						if (name.equals("skill")){
+							skillInfo=new SkillInfo();
+						}
+						else{
+							String paramValue=parser.nextText();
+							boolean isActionParam=setActionParam(skillInfo, name, paramValue);
+							if (isActionParam){
+								setSkillParam(skillInfo, name, paramValue);
+							}
+						}
+					}
+					break;
+				case XmlPullParser.END_TAG:
+					name = parser.getName();
+					if (name.equals("skill")){
+						//monster闭合
+						skill_info_list.add(skillInfo);
+					}
+					break;
+				default:
+					break;
+				}
+				eventType = parser.next();
+			}
+		} catch (XmlPullParserException e) {
+			e.printStackTrace();
+			return -1;
+		} catch (URISyntaxException e) {
+			e.printStackTrace();
+			return -2;
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+			return -3;
+		} catch (IOException e) {
+			e.printStackTrace();
+			return -4;
+		}
+		if (skill_info_list==null){
+			return 0;
+		}
+		int skillAmount=skill_info_list.size();
+		if ( skillAmount>0 ){
+			SkillInfo.skillInfoList=new SkillInfo[skillAmount];
+			skill_info_list.toArray(SkillInfo.skillInfoList);
+			System.out.println("载入"+(skillAmount-1)+"种技能数据");
+		}
+		return skillAmount;
+	}
 }

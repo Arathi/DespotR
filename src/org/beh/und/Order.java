@@ -59,7 +59,6 @@ public class Order implements Comparable<Order>{
 	
 	@Override
 	public int compareTo(Order other) {
-		// TODO Auto-generated method stub
 		if (agi>other.getAgi()){
 			return -1;
 		}
@@ -74,7 +73,7 @@ public class Order implements Comparable<Order>{
 	 * 结果保存到结果表(results)中
 	 */
 	public void execute(){
-		//TODO 实现 命令的执行(完善逃跑，实现魔法)
+		//TODO 实现 命令的执行(实现魔法)
 		results=new ArrayList<Result>();
 		if (src.isCanNotBattle()){
 			return;
@@ -93,7 +92,7 @@ public class Order implements Comparable<Order>{
 			System.out.println(src.getName()+"逃跑");
 			break;
 		case ORDER_CODE_SPELL:
-			//;
+			//TODO 完善魔法系统
 			SpellSystem.execute(this);
 			break;
 		}

@@ -1,6 +1,6 @@
 package org.beh.und;
 
-import org.beh.und.xml.PullHandler;
+import java.util.*;
 
 public class MonsterInfo {
 	public static final int ACTION_MODE_RANDOM = 0;
@@ -28,12 +28,14 @@ public class MonsterInfo {
 	private int[] actions;
 	private String[] actionStrings;
 	private int actmode;
+	private ArrayList<Integer> skills;
 	
 	public MonsterInfo() {
 		resists=new int[RESIST_TYPE+1];
 		resistsMax=new int[RESIST_TYPE+1];
 		actions=new int[ACTION_AMOUNT];
 		actionStrings=new String[ACTION_AMOUNT];
+		skills=new ArrayList<Integer>();
 	}
 	
 	public String getIcon() {
@@ -108,6 +110,7 @@ public class MonsterInfo {
 	public void setGold(int gold) {
 		this.gold = gold;
 	}
+	@Deprecated
 	public int[] getResists() {
 		return resists;
 	}
@@ -118,35 +121,52 @@ public class MonsterInfo {
 		this.resists[resistIndex] = resistValue;
 		this.resistsMax[resistIndex] = resistMaxValue;
 	}
-	public int[] getActions() {
-		return actions;
+	public double getResistRate(int resistIndex){
+		return resists[resistIndex]*1.0/resistsMax[resistIndex];
+	}
+	public void setAction(int index, String actionString) {
+		this.actionStrings[index] = actionString;
+		//s[0]*31^(n-1) + s[1]*31^(n-2) + ... + s[n-1]
+		this.actions[index] = actionString.hashCode();
 	}
 	public int getAction(int index) {
 		return actions[index];
 	}
-	public void setActions(int[] actions) {
-		this.actions = actions;
-	}
-	public void setAction(int index, int actionId) {
-		this.actions[index] = actionId;
-	}
-	public String[] getActionStrings() {
-		return actionStrings;
-	}
 	public String getActionString(int actionOrder) {
 		return actionStrings[actionOrder];
 	}
-	public void setActionStrings(String[] actionStrings) {
-		this.actionStrings = actionStrings;
+	@Deprecated
+	public int[] getActions() {
+		return actions;
 	}
+	@Deprecated
+	public void setActions(int[] actions) {
+		this.actions = actions;
+	}
+	@Deprecated
+	public void setAction(int index, int actionId) {
+		this.actions[index] = actionId;
+	}
+	@Deprecated
 	public void setActionString(int actionOrder, String actionString) {
 		this.actionStrings[actionOrder] = actionString;
+	}
+	@Deprecated
+	public String[] getActionStrings() {
+		return actionStrings;
+	}
+	@Deprecated
+	public void setActionStrings(String[] actionStrings) {
+		this.actionStrings = actionStrings;
 	}
 	public int getActmode() {
 		return actmode;
 	}
 	public void setActmode(int actmode) {
 		this.actmode = actmode;
+	}
+	public void setSkills(ArrayList<Integer> skills){
+		this.skills=skills;
 	}
 	
 	@Override
@@ -163,13 +183,13 @@ public class MonsterInfo {
 	 * @return 生成出的monster实例
 	 */
 	public Monster create(){
-		Monster monster=new Monster(name, hp, mp, atk, def, agi, jink, inte, exp, gold, resists, actions, actmode);
-//		monster.init(name, hp, mp, atk, def, agi, jink, inte, exp, gold, resists, actions, actmode);
+		Monster monster=new Monster(name, hp, mp, atk, def, agi, jink, inte, exp, gold, resists, actions, actmode, skills);
 		return monster;
 	}
 	
 	public static void init(){
-		PullHandler.initMonsters(); //MonsterInfoList
+		System.out.println("Monster系统正在初始化");
+		Util.getXmlHandler().initMonsters(); //MonsterInfoList
 	}
 	
 	/**
@@ -179,5 +199,13 @@ public class MonsterInfo {
 	public static Monster create(int id){
 		if (monsterInfoList==null) return null;
 		return monsterInfoList[id].create();
+	}
+
+	public List<Integer> getSkills() {
+		// TODO Auto-generated method stub
+		if (skills==null){
+			skills=new ArrayList<Integer>();
+		}
+		return skills;
 	}
 }

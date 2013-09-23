@@ -1,19 +1,20 @@
 package org.beh.und;
 
+import java.util.ArrayList;
+
 public class Monster extends Unit {
 	int actionIndex;
 	int actionListSize;
 	int[] actions;
 	int actionMode;
 	
-	//public Monster(){}
-	
 	public Monster(
 			String name, int hp, int mp, 
 			int atk, int def, int agi, 
 			int jink, int inte, int exp, int gold, 
-			int[] resists, int[] actions, int actmode){
-		init(name, hp, mp, atk, def, agi, jink, inte, exp, gold, resists, actions, actmode);
+			int[] resists, int[] actions, int actmode,
+			ArrayList<Integer> skills){
+		init(name, hp, mp, atk, def, agi, jink, inte, exp, gold, resists, actions, actmode, skills);
 		System.out.println("创建Monster："+this.toString());
 	}
 	
@@ -53,13 +54,15 @@ public class Monster extends Unit {
 	 * @param resists 魔法抗性
 	 * @param actions 动作表
 	 * @param actmode 动作模式
+	 * @param skills  技能表
 	 */
 	public void init(
 			String name, int hp, int mp, 
 			int atk, int def, int agi, 
 			int jink, int inte, int exp, int gold, 
-			int[] resists, int[] actions, int actmode){
-		super.init(name, hp, mp, atk, def, agi, jink, inte, exp, gold, resists);
+			int[] resists, int[] actions, int actmode,
+			ArrayList<Integer> skills){
+		super.init(name, hp, mp, atk, def, agi, jink, inte, exp, gold, resists, skills);
 		initAI(actmode, actions);
 	}
 	
@@ -71,13 +74,24 @@ public class Monster extends Unit {
 	}
 	/**
 	 * 选取命令
+	 * @return 选取的命令
 	 */
 	@Override
 	public Order selectOrder() {
 		Order order=null;
-		//获取命令对应的动作 
-		int actionId=actions[actionIndex];
-		ActionInfo action=ActionInfo.getActionInfo(actionId);
+		//获取命令对应的动作
+		int orderId=actions[actionIndex];
+		ActionInfo action=ActionInfo.getActionInfo(orderId);
+		if (action==null){
+			//TODO 从技能表中找出改orderId对应的技能
+			int skillId = findSkillByOrder(orderId);
+			action = SkillInfo.getSkillInfo(skillId);
+		}
+		if (action==null){
+			System.out.println("未识别的orderId: "+orderId);
+			System.out.println("命令设置为[aatk]");
+			action=ActionInfo.getActionInfo(Util.id2int("[aatk]"));
+		}
 		//选择目标单位
 		Unit target=selectTarget(action);
 		//创建命令

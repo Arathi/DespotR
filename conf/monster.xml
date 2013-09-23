@@ -153,6 +153,7 @@
 <action7>gira</action7>
 <action8>run</action8>
 <actmode>random</actmode>
+<skill>[gir2]</skill>
 </monster>
 <monster>
 <icon>Monster/SFC/No.006.gif</icon>
@@ -184,6 +185,7 @@
 <action7>gira</action7>
 <action8>attack</action8>
 <actmode>random</actmode>
+<skill>[gir2]</skill>
 </monster>
 <monster>
 <icon>Monster/SFC/No.007.gif</icon>
@@ -276,6 +278,7 @@
 <action7>run</action7>
 <action8>run</action8>
 <actmode>random</actmode>
+<skill>[gir2]</skill>
 </monster>
 <monster>
 <icon>Monster/SFC/No.010.gif</icon>
@@ -337,6 +340,7 @@
 <action7>gira</action7>
 <action8>run</action8>
 <actmode>random</actmode>
+<skill>[gir2]</skill>
 </monster>
 <monster>
 <icon>Monster/SFC/No.012.gif</icon>
@@ -399,6 +403,8 @@
 <action7>run</action7>
 <action8>run</action8>
 <actmode>fixed</actmode>
+<skill>[gir2]</skill>
+<skill>[rarh]</skill>
 </monster>
 <monster>
 <icon>Monster/SFC/No.014.gif</icon>
@@ -492,6 +498,7 @@
 <action7>attack</action7>
 <action8>hoimi</action8>
 <actmode>random</actmode>
+<skill>[hoim]</skill>
 </monster>
 <monster>
 <icon>Monster/SFC/No.017.gif</icon>
@@ -523,6 +530,7 @@
 <action7>attack</action7>
 <action8>gira</action8>
 <actmode>random</actmode>
+<skill>[gir2]</skill>
 </monster>
 <monster>
 <icon>Monster/SFC/No.018.gif</icon>
@@ -554,6 +562,9 @@
 <action7>mahoton</action7>
 <action8>run</action8>
 <actmode>random</actmode>
+<skill>[rarh]</skill>
+<skill>[gir2]</skill>
+<skill>[maht]</skill>
 </monster>
 <monster>
 <icon>Monster/SFC/No.019.gif</icon>
@@ -585,6 +596,7 @@
 <action7>attack</action7>
 <action8>attack</action8>
 <actmode>random</actmode>
+<skill>[maht]</skill>
 </monster>
 <monster>
 <icon>Monster/SFC/No.020.gif</icon>
@@ -616,6 +628,8 @@
 <action7>attack</action7>
 <action8>hoimi</action8>
 <actmode>random</actmode>
+<skill>[hoim]</skill>
+<skill>[gir2]</skill>
 </monster>
 <monster>
 <icon>Monster/SFC/No.021.gif</icon>
@@ -646,6 +660,7 @@
 <action7>run</action7>
 <action8>attack</action8>
 <actmode>random</actmode>
+<skill>[rarh]</skill>
 </monster>
 <monster>
 <icon>Monster/SFC/No.022.gif</icon>
@@ -738,6 +753,7 @@
 <action7>attack</action7>
 <action8>attack</action8>
 <actmode>random</actmode>
+<skill>[hoim]</skill>
 </monster>
 <monster>
 <icon>Monster/SFC/No.025.gif</icon>
@@ -829,6 +845,7 @@
 <action7>mahoton</action7>
 <action8>attack</action8>
 <actmode>fixed</actmode>
+<skill>[maht]</skill>
 </monster>
 <monster>
 <icon>Monster/SFC/No.028.gif</icon>
@@ -859,6 +876,8 @@
 <action7>attack</action7>
 <action8>hoimi</action8>
 <actmode>random</actmode>
+<skill>[rarh]</skill>
+<skill>[hoim]</skill>
 </monster>
 <monster>
 <icon>Monster/SFC/No.029.gif</icon>
@@ -952,6 +971,7 @@
 <action7>attack</action7>
 <action8>attack</action8>
 <actmode>random</actmode>
+<skill>[dfr1]</skill>
 </monster>
 <monster>
 <icon>Monster/SFC/No.032.gif</icon>
@@ -982,6 +1002,8 @@
 <action7>behoimi</action7>
 <action8>attack</action8>
 <actmode>random</actmode>
+<skill>[hoi2]</skill>
+<skill>[dfr1]</skill>
 </monster>
 <monster>
 <icon>Monster/SFC/No.033.gif</icon>
@@ -1013,6 +1035,8 @@
 <action7>mahoton</action7>
 <action8>attack</action8>
 <actmode>random</actmode>
+<skill>[gir4]</skill>
+<skill>[maht]</skill>
 </monster>
 <monster>
 <icon>Monster/SFC/No.034.gif</icon>
@@ -1044,6 +1068,7 @@
 <action7>attack</action7>
 <action8>rariho</action8>
 <actmode>random</actmode>
+<skill>[rarh]</skill>
 </monster>
 <monster>
 <icon>Monster/SFC/No.035.gif</icon>
@@ -1074,6 +1099,7 @@
 <action7>breathoffire</action7>
 <action8>breathoffire</action8>
 <actmode>random</actmode>
+<skill>[dfr1]</skill>
 </monster>
 <monster>
 <icon>Monster/SFC/No.036.gif</icon>
@@ -1136,6 +1162,8 @@
 <action7>behoimi</action7>
 <action8>begirama</action8>
 <actmode>random</actmode>
+<skill>[hoi2]</skill>
+<skill>[gir4]</skill>
 </monster>
 <monster>
 <icon>Monster/SFC/No.038.gif</icon>
@@ -1167,6 +1195,8 @@
 <action7>breathoffire</action7>
 <action8>attack</action8>
 <actmode>fixed</actmode>
+<skill>[dfr1]</skill>
+<skill>[maht]</skill>
 </monster>
 <monster>
 <icon>Monster/SFC/No.039.gif</icon>
@@ -1198,6 +1228,8 @@
 <action7>behoimi</action7>
 <action8>attack</action8>
 <actmode>random</actmode>
+<skill>[rarh]</skill>
+<skill>[hoi2]</skill>
 </monster>
 <monster>
 <icon>Monster/SFC/No.040.gif</icon>
@@ -1229,5 +1261,8 @@
 <action7>attack</action7>
 <action8>breathoffire</action8>
 <actmode>fixed</actmode>
+<skill>[dfr3]</skill>
+<skill>[dfr2]</skill>
+<skill>[dfr1]</skill>
 </monster>
 </monsterlist>

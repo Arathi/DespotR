@@ -3,8 +3,7 @@ package org.beh.und;
 import java.util.*;
 
 public abstract class Unit {
-	
-	//姿态
+	//姿态常量
 	public static final int POSTURE_NONE=0;
 	public static final int POSTURE_ATTACK=1;
 	public static final int POSTURE_DEFENCE=2;
@@ -34,6 +33,31 @@ public abstract class Unit {
 	protected int posture;
 	protected boolean fleed;
 	
+	protected List<Integer> skills;
+
+	public String getName() {
+		return name;
+	}
+	public int getAgi() {
+		return agi;
+	}
+	public int getPosture(){
+		return posture;
+	}
+	public int getJink() {
+		return jink;
+	}
+	/**
+	 * 获取防御力（玩家单位需要重写该方法）
+	 * @return 防御力
+	 */
+	public int getDef() {
+		return def;
+	}
+	protected void setSkills(List<Integer> skills){
+		this.skills=skills;
+	}
+
 	public void initParams(
 			String name, int hp, int mp, 
 			int atk, int def, int agi, 
@@ -67,10 +91,12 @@ public abstract class Unit {
 			String name, int hp, int mp, 
 			int atk, int def, int agi, 
 			int jink, int inte, int exp, int gold, 
-			int[] resists
+			int[] resists, ArrayList<Integer> skills
 			){
 		initParams(name, hp, mp, atk, def, agi, jink, inte, exp, gold);
 		initResists(resists);
+//		initSkills();
+		setSkills(skills);
 		buffMap=new HashMap<Integer, Integer>();
 		posture=POSTURE_ATTACK;
 		fleed=false;
@@ -82,36 +108,38 @@ public abstract class Unit {
 	 * @return 攻击的结果
 	 */
 	public Result attack(Unit target){
-		//攻击伤害=(攻方攻击力-守方守备力*50%)*45~55%
 		Result result=new Result();
 		if (target==null){
 			System.out.println("但攻击的目标并不存在");
 			return null;
 		}
-		//TODO 闪避计算(闪避值/64)
 		boolean jinkFlag=false;
 		boolean critFlag=false;
 		double jinkRand=Util.getRandomReal(0, 64);
 		if (jinkRand<=target.getJink()) jinkFlag=true;
-		if (jinkFlag){
+		if (jinkFlag){ //闪避的情况
 			System.out.println("但是"+target.getName()+"躲开了");
 		}
-		else{
-			//TODO 暴击计算(1/32)
+		else{ //正常
 			double critRand=Util.getRandomReal(0, 32);
 			if (critRand<=1) critFlag=true;
+			//某些怪物不可被暴击(暴击免疫技能)，critFlag设置为false
+			//target.haveSkill("[nocr]");
 			double damageMin=0, damageMax=0, damageR=0 ;
 			if (!critFlag){
-				damageMin=(atk-target.getDef()*0.5)*0.25;
-				damageMax=(atk-target.getDef()*0.5)*0.5;
+				// FC版 攻击伤害=(攻方攻击力-守方守备力*50%)*(25~50%)
+				//SFC版 攻击伤害=(攻方攻击力-守方守备力*50%)*(45~55%) （采用）
+				damageMin=(atk-target.getDef()*0.5)*0.45;
+				damageMax=(atk-target.getDef()*0.5)*0.55;
 			}
 			else{
+				// 会心一击  攻击伤害=(攻击力*0.5+1~攻击力)
 				System.out.println("会心的一击！");
 				damageMin=atk*0.5+1;
 				damageMax=atk;
 			}
 			damageR=Util.getRandomReal(damageMin, damageMax);
-			int damage = (int) damageR;
+			int damage = (int) (damageR);
 			int real_damage=target.changeHp(-damage);
 			result.value=real_damage;
 		}
@@ -120,15 +148,6 @@ public abstract class Unit {
 		return result;
 	}
 	
-	private int getJink() {
-		return jink;
-	}
-
-	private int getDef() {
-		// TODO Auto-generated method stub
-		return def;
-	}
-
 	/**
 	 * 修改单位的生命值
 	 * @param delta 生命值变化量
@@ -149,7 +168,7 @@ public abstract class Unit {
 		if (real_delta<0){
 			System.out.println(name+"受到"+(-real_delta)+"点伤害");
 			if (deadFlag){
-				System.out.println(name+"便当了……");
+				System.out.println(name+"领便当了");
 			}
 		}
 		else if (real_delta>0) {
@@ -169,7 +188,7 @@ public abstract class Unit {
 	 */
 	public boolean isCanNotBattle() {
 		// TODO 完善“战斗不能”的判断条件
-		if (hp<=0){
+		if (hp<=0){ //单位已经死亡
 			return true;
 		}
 		if (fleed){ //已逃跑的，也算不能继续战斗的单位
@@ -177,19 +196,12 @@ public abstract class Unit {
 		}
 		return false;
 	}
-
-	public String getName() {
-		return name;
-	}
-
-	public int getAgi() {
-		return agi;
-	}
 	
-	public int getPosture(){
-		return posture;
-	}
+	/**
+	 * 重置状态
+	 */
 	public void resetPosture(){
+		//TODO 添加睡眠Buff的影响
 		posture=POSTURE_ATTACK;
 	}
 	
@@ -204,20 +216,14 @@ public abstract class Unit {
 	 * @return 逃跑是否成功
 	 */
 	public boolean run(){
-		//TODO 使用DQ1风格的逃跑原理
-//		double _self=0,_enemy=0;
 		double successRate=0, fleeRand=1;
-		
+		//如果敌方不在攻击状态，则逃跑必定成功
 		if (enemy.getPosture()==POSTURE_NONE || enemy.getPosture()==POSTURE_DEFENCE){
 			fleed=true;
 		}
 		else{
+			//逃跑成功率：总敏捷比例
 			successRate=1.0*agi/(1.0*agi+1.0*enemy.getAgi());
-//			_self=Util.getRandomReal(0, agi);
-//			_enemy=Util.getRandomReal(0, enemy.getAgi());
-//			if (_self>_enemy){
-//				fleed=true;
-//			}
 			fleeRand=Util.getRandomReal(0, 1);
 			if (fleeRand<=successRate){
 				fleed=true;
@@ -228,6 +234,19 @@ public abstract class Unit {
 			System.out.println("但是逃跑失败");
 		}
 		return fleed;
+	}
+	
+	public int findSkillByOrder(int orderId){
+		int i, skillId;
+		SkillInfo skillInfo;
+		for (i=0; i<skills.size(); i++){
+			skillId=skills.get(i);
+			skillInfo = SkillInfo.getSkillInfo(skillId);
+			if (skillInfo!=null && skillInfo.getId()==skillId){
+				return skillId;
+			}
+		}
+		return 0;
 	}
 	
 }

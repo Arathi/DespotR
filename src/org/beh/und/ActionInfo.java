@@ -2,8 +2,6 @@ package org.beh.und;
 
 import java.util.*;
 
-import org.beh.und.xml.PullHandler;
-
 /**
  * <b>动作信息类</b>
  * <br/>
@@ -21,85 +19,72 @@ public class ActionInfo {
 	public static final int TARGET_RANGE_TEAM=2;
 	
 	public static ActionInfo[] actionInfoList;
-	public static Map<String, Integer> actionStringMap;
+	public static Map<String, Integer> actionOrderStringMap;
+	public static Map<Integer, Integer> actionOrderMap;
 	public static Map<Integer, Integer> actionIdMap;
 	
-	private int actionId;
-	private String actionString;
-	private String name;
-	private String description;
+	protected int objectId;
+	protected String orderString;
+	protected int orderCode;
+	protected String name;
+	protected String description;
 	
-	private String codeStr;
-	private int code;
-	private int spellCode;
+	protected String codeStr;
+	protected int code;
 	
-	private int targetType;
-	private int targetRange;
+	protected int targetType;
+	protected int targetRange;
 	
-	public int getActionId() {
-		return actionId;
+//	<action>
+//		<id>[aatk]</id>
+//		<string>attack</string>
+//		<name>攻撃</name>
+//		<type>enemy,single</type>
+//		<code>attack</code>
+//		<desc>攻击伤害=(攻方攻击力-守方守备力*50%)*45~55%</desc>
+//	</action>
+
+	public int getId() {
+		return objectId;
 	}
-	public void setActionId(int actionId) {
-		this.actionId = actionId;
+	public void setId(int id) {
+		this.objectId = id;
 	}
-	public String getActionString() {
-		return actionString;
+	@Deprecated
+	public final String getOrderString() {
+		return orderString;
 	}
-	public void setActionString(String actionString) {
-		this.actionString = actionString;
+	public final int getOrderCode() {
+		return orderCode;
 	}
-	public String getName() {
+	public final void setOrderString(String ostring) {
+		this.orderString = ostring;
+		this.orderCode = ostring.hashCode();
+	}
+	public final String getName() {
 		return name;
 	}
-	public void setName(String name) {
+	public final void setName(String name) {
 		this.name = name;
 	}
-	public String getDescription() {
+	public final String getDescription() {
 		return description;
 	}
-	public void setDescription(String description) {
+	public final void setDescription(String description) {
 		this.description = description;
 	}
-	
-	public static void init(){
-		PullHandler.initActions();
-		int i,amount=actionInfoList.length;
-		actionStringMap=new HashMap<String, Integer>();
-		actionIdMap=new HashMap<Integer,Integer>();
-		for (i=1; i<amount; i++){
-			ActionInfo info=actionInfoList[i];
-			actionStringMap.put(info.getActionString(), i);
-			actionIdMap.put(info.getActionId(), i);
-		}
-	}
-	
-	public static int getActionId(String actionString){
-		int actionIndex=actionStringMap.get(actionString);
-		int actionId=actionInfoList[actionIndex].actionId;
-		return actionId;
-	}
-	
-	public static ActionInfo getActionInfo(int actionId) {
-		int actionIndex=actionIdMap.get(actionId);
-		ActionInfo actionInfo=actionInfoList[actionIndex];
-		return actionInfo;
-	}
-	
-	public void setTargetUnitSide(int targetType) {
+	public final void setTargetUnitSide(int targetType) {
 		this.targetType=targetType;
 	}
-	public void setTargetRange(int targetRange) {
+	public final void setTargetRange(int targetRange) {
 		this.targetRange=targetRange;
 	}
-	
-	public int getTargetUnitSide(){
+	public final int getTargetUnitSide(){
 		return targetType;
 	}
-
-	public int getTargetRange(){
+	public final int getTargetRange(){
 		return targetRange;
 	}
-	
 	public void setCode(String codeStr){
 		this.codeStr=codeStr;
 		//转换为对应的code
@@ -109,28 +94,95 @@ public class ActionInfo {
 		}
 		else if (SpellSystem.SpellCodeMap.containsKey(codeStr)){
 			this.code=Order.ORDER_CODE_SPELL;
-			this.spellCode=SpellSystem.SpellCodeMap.get(codeStr);
+			setParam(SpellSystem.SpellCodeMap.get(codeStr));
 		}
 		else{
 			this.code=Order.ORDER_CODE_ATTACK;
 		}
 	}
-	
 	public int getCode(){
 		return code;
 	}
-
 	@Deprecated
 	public String getCodeStr(){
 		return codeStr;
 	}
+	/**
+	 * 获取动作参数，SkillInfo要重写这个方法(不要对ActionInfo调用该方法)
+	 * @return 如果调用了，返回一个错误的参数值
+	 */
+	@Deprecated
+	public int getParam() {
+		return -1;
+	}
+	/**
+	 * 设置动作参数，SkillInfo要重写这个方法<br/>
+	 * (不要对ActionInfo调用该方法，即使调用了也没有实际操作)
+	 * @param param
+	 */
+	@Deprecated
+	public void setParam(int param) {}
 	
-	public int getSpellCode() {
-		return spellCode;
+	/**
+	 * 初始化Action系统
+	 */
+	public static void init(){
+		System.out.println("Action系统正在初始化");
+		Util.getXmlHandler().initActions();
+		int i,amount=actionInfoList.length;
+		actionOrderStringMap=new HashMap<String, Integer>();
+		actionOrderMap = new HashMap<Integer, Integer>();
+		actionIdMap=new HashMap<Integer,Integer>();
+		for (i=1; i<amount; i++){
+			ActionInfo info=actionInfoList[i];
+			actionOrderStringMap.put(info.getOrderString(), i);
+			actionOrderMap.put(info.getOrderCode(), i);
+			actionIdMap.put(info.getId(), i);
+		}
+	}
+	
+	/**
+	 * 通过动作字符串获取对应动作ID
+	 * @param actionString
+	 * @return
+	 */
+	public static int getActionId(String actionString){
+		if (!actionOrderStringMap.containsKey(actionString)){
+			return 0;
+		}
+		int actionIndex=actionOrderStringMap.get(actionString);
+		int actionId=actionInfoList[actionIndex].getId();
+		return actionId;
+	}
+	
+	/**
+	 * 通过orderId获取对应动作信息
+	 * @param orderId
+	 * @return
+	 */
+	public static ActionInfo getActionInfo(int orderId) {
+		int actionIndex=0;
+		//if (actionIdMap.containsKey(actionId)){
+			//actionIndex=actionIdMap.get(actionId);
+		//}
+		if (actionOrderMap.containsKey(orderId)){
+			actionIndex=actionOrderMap.get(orderId);
+		}
+		ActionInfo actionInfo=actionInfoList[actionIndex];
+		return actionInfo;
+	}
+	/**
+	 * 通过动作ID([xxxx]形式)获取对应动作信息
+	 * @param actionId
+	 * @return
+	 */
+	public static ActionInfo getActionInfo(String id) {
+		return getActionInfo(Util.id2int(id));
 	}
 	
 	public String toString(){
-		String info="No."+actionId+"("+actionString+")";
+		String info="["+Util.int2id(objectId)+"] ("+orderString+")";
 		return info;
 	}
+	
 }
