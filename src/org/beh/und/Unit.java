@@ -95,7 +95,6 @@ public abstract class Unit {
 			){
 		initParams(name, hp, mp, atk, def, agi, jink, inte, exp, gold);
 		initResists(resists);
-//		initSkills();
 		setSkills(skills);
 		buffMap=new HashMap<Integer, Integer>();
 		posture=POSTURE_ATTACK;
@@ -247,6 +246,20 @@ public abstract class Unit {
 			}
 		}
 		return 0;
+	}
+	public boolean changeMp(int delta) {
+		// TODO Auto-generated method stub
+		//if () //不可思议的帽子类物品特效，减少法力消耗
+		int tmp=mp+delta;
+		if (tmp>max_mp){
+			tmp=max_mp;
+		}
+		else if (tmp<=0){
+			//法力值不足
+			return false;
+		}
+		mp=tmp;
+		return true;
 	}
 	
 }

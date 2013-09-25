@@ -122,7 +122,7 @@ public abstract class XMLHandler {
 		else if (name.equals("string")){
 			actionInfo.setOrderString(paramValue);
 		}
-		else if (name.equals("name")){
+		else if (name.endsWith("name")){
 			actionInfo.setName(paramValue);
 		}
 		else if (name.equals("desc")){
@@ -172,8 +172,10 @@ public abstract class XMLHandler {
 			skillInfo.setLearnLevel(intValue);
 		}
 		if (name.startsWith("data")){
-			System.out.println("暂不处理DATA");
+			//System.out.println("暂不处理DATA");
 			//TODO 处理DATA
+			intValue=Util.toInteger(name.substring(4));
+			skillInfo.setData(intValue, Util.toInteger(paramValue) );
 		}
 		return true;
 	}

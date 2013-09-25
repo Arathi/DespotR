@@ -240,7 +240,7 @@ public class PullHandler extends XMLHandler {
 						else{
 							String paramValue=parser.nextText();
 							boolean isActionParam=setActionParam(skillInfo, name, paramValue);
-							if (isActionParam){
+							if (!isActionParam){
 								setSkillParam(skillInfo, name, paramValue);
 							}
 						}

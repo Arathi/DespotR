@@ -122,8 +122,4 @@ public class Util {
 		return id;
 	}
 	
-	public void getStringRHash(){
-		
-	}
-
 }

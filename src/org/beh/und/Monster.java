@@ -31,6 +31,7 @@ public class Monster extends Unit {
 		for (i=0; i<actionListSize; i++){
 			this.actions[i]=actions[i];
 		}
+		//决定第一个actionIndex
 		if (actionMode==MonsterInfo.ACTION_MODE_FIXED){
 			actionIndex=0;
 		}
@@ -89,8 +90,7 @@ public class Monster extends Unit {
 		}
 		if (action==null){
 			System.out.println("未识别的orderId: "+orderId);
-			System.out.println("命令设置为[aatk]");
-			action=ActionInfo.getActionInfo(Util.id2int("[aatk]"));
+			action=ActionInfo.getActionInfo("attack".hashCode());
 		}
 		//选择目标单位
 		Unit target=selectTarget(action);

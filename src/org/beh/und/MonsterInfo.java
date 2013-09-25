@@ -202,7 +202,6 @@ public class MonsterInfo {
 	}
 
 	public List<Integer> getSkills() {
-		// TODO Auto-generated method stub
 		if (skills==null){
 			skills=new ArrayList<Integer>();
 		}

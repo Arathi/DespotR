@@ -46,7 +46,6 @@ public class Battle1V1 {
 		//ÖØÖÃ×ËÌ¬
 		unitA.resetPosture();
 		unitB.resetPosture();
-		//
 		
 		//ÊÕ¼¯ÃüÁî
 		orderList.clear();
@@ -86,7 +85,6 @@ public class Battle1V1 {
 	}
 
 	public boolean isEnd() {
-		// TODO Auto-generated method stub
 		return end;
 	}
 	

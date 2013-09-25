@@ -5,7 +5,6 @@ import org.beh.und.*;
 public class UndConsole {
 
 	public static void main(String[] args) {
-		// TODO Auto-generated method stub
 		ActionInfo.init();
 		SkillInfo.init();
 		MonsterInfo.init();
@@ -20,18 +19,6 @@ public class UndConsole {
 			turnId++;
 		}
 		
-//		System.out.println(monsterA);
-//		System.out.println(monsterB);
-//		
-//		monsterA.attack(monsterB);
-//		monsterB.attack(monsterA);
-//		monsterA.attack(monsterB);
-//		monsterB.attack(monsterA);
-//		monsterA.attack(monsterB);
-//		monsterB.attack(monsterA);
-//		
-//		System.out.println(monsterA);
-//		System.out.println(monsterB);
 	}
 
 }
