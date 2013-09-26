@@ -107,17 +107,22 @@ public abstract class Unit {
 	 * @return 攻击的结果
 	 */
 	public Result attack(Unit target){
-		Result result=new Result();
+		Result result=new Result(target, Result.RESULT_TYPE_DAMAGE);
+//		result.type=;
 		if (target==null){
-			System.out.println("但攻击的目标并不存在");
-			return null;
+			result.success=false;
+			result.message="但攻击的目标并不存在";
+			//System.out.println();
+			return result;
 		}
 		boolean jinkFlag=false;
 		boolean critFlag=false;
 		double jinkRand=Util.getRandomReal(0, 64);
 		if (jinkRand<=target.getJink()) jinkFlag=true;
 		if (jinkFlag){ //闪避的情况
-			System.out.println("但是"+target.getName()+"躲开了");
+			//System.out.println("但是"+target.getName()+"躲开了");
+			result.success=false;
+			result.message="但是"+target.getName()+"躲开了";
 		}
 		else{ //正常
 			double critRand=Util.getRandomReal(0, 32);
@@ -133,7 +138,7 @@ public abstract class Unit {
 			}
 			else{
 				// 会心一击  攻击伤害=(攻击力*0.5+1~攻击力)
-				System.out.println("会心的一击！");
+				//System.out.println("会心的一击！");
 				damageMin=atk*0.5+1;
 				damageMax=atk;
 			}
@@ -165,16 +170,16 @@ public abstract class Unit {
 		}
 		int real_delta=hp-old_hp;
 		if (real_delta<0){
-			System.out.println(name+"受到"+(-real_delta)+"点伤害");
+			//System.out.println(name+"受到"+(-real_delta)+"点伤害");
 			if (deadFlag){
-				System.out.println(name+"领便当了");
+				//System.out.println(name+"领便当了");
 			}
 		}
 		else if (real_delta>0) {
-			System.out.println(name+"得到"+real_delta+"点治疗");
+			//System.out.println(name+"得到"+real_delta+"点治疗");
 		}
 		else{
-			System.out.println("但是没有效果");
+			//System.out.println("但是没有效果");
 		}
 		return real_delta;
 	}
@@ -230,12 +235,12 @@ public abstract class Unit {
 		}
 		
 		if (!fleed){
-			System.out.println("但是逃跑失败");
+			//System.out.println("但是逃跑失败");
 		}
 		return fleed;
 	}
 	
-	public int findSkillByOrder(int orderId){
+	public int findSkillIdByOrder(int orderId){
 		int i, skillId;
 		SkillInfo skillInfo;
 		for (i=0; i<skills.size(); i++){
@@ -247,7 +252,20 @@ public abstract class Unit {
 		}
 		return 0;
 	}
-	public boolean changeMp(int delta) {
+	public SkillInfo findSkillInfoByOrder(int orderId){
+		int i, skillId;
+		SkillInfo skillInfo;
+		for (i=0; i<skills.size(); i++){
+			skillId=skills.get(i);
+			skillInfo = SkillInfo.getSkillInfo(skillId);
+			if (skillInfo!=null && skillInfo.getId()==skillId){
+				return skillInfo;
+			}
+		}
+		return null;
+	}
+	
+	public boolean changeMp(int delta, boolean testOnly) {
 		// TODO Auto-generated method stub
 		//if () //不可思议的帽子类物品特效，减少法力消耗
 		int tmp=mp+delta;
@@ -258,8 +276,22 @@ public abstract class Unit {
 			//法力值不足
 			return false;
 		}
-		mp=tmp;
+		if (!testOnly)
+			mp=tmp;
 		return true;
+	}
+	
+	public boolean checkBuff(int buffId){
+		return buffMap.containsKey(buffId);
+	}
+	
+	public void setBuff(int buffId, int time) {
+		// TODO 对于不同的Buff，做不同的处理
+		buffMap.put(buffId, time);
+	}
+	
+	public int setBuff(int buffId) {
+		return buffMap.get(buffId);
 	}
 	
 }

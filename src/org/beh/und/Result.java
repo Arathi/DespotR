@@ -19,20 +19,43 @@ public class Result {
 	boolean critFlag; //致命一击
 	boolean jinkFlag; //闪避
 	boolean success; //动作执行结果为成功
+	//boolean sleepFlag; //睡眠标志
+	//boolean scienceFlag; //沉默标志
 	
-	public Result(){
-		
+	String message; // 错误时的消息
+	
+	protected Result(Unit target, int type){
+		this.target=target;
+		this.type=type;
 	}
 	
 	public String toString(){
 		String result="";
+		String targetName=target.getName();
 		if (type==RESULT_TYPE_DAMAGE){
-			result+=src.getName()+"受到"+value+"点伤害";
+			if (jinkFlag){
+				result+="但是"+targetName+"躲开了";
+			}
+			else{
+				if (critFlag) result+="会心的一击！\n";
+				result+=targetName+"受到"+value+"点伤害";
+			}
 		}
 		if (type==RESULT_TYPE_HEAL){
-			result+=src.getName()+"得到"+value+"点治疗";
+			result+=targetName+"得到"+value+"点治疗";
 		}
-		//return super.toString();
+		if (type==RESULT_TYPE_BUFF){
+			result+=targetName;
+			if (value==SpellSystem.BUFFID_FIXED_SLEEP){
+				result+="睡着了...";
+			}
+			else if (value==SpellSystem.BUFFID_FIXED_SLIENCE){
+				result+="沉默了!";
+			}
+		}
+		if (type==RESULT_TYPE_NONE){
+			result+=message;
+		}
 		return result;
 	}
 }

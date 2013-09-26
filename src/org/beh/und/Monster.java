@@ -85,8 +85,9 @@ public class Monster extends Unit {
 		ActionInfo action=ActionInfo.getActionInfo(orderId);
 		if (action==null){
 			//TODO 从技能表中找出改orderId对应的技能
-			int skillId = findSkillByOrder(orderId);
-			action = SkillInfo.getSkillInfo(skillId);
+//			int skillId = findSkillByOrder(orderId);
+//			action = SkillInfo.getSkillInfo(skillId);
+			action = findSkillInfoByOrder(orderId);
 		}
 		if (action==null){
 			System.out.println("未识别的orderId: "+orderId);

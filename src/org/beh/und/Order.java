@@ -28,6 +28,7 @@ public class Order implements Comparable<Order>{
 	
 	protected ActionInfo action;
 	
+	protected String actionTextDesc; //动作文字描述
 	protected ArrayList<Result> results;
 	
 	public static Map<String,Integer> OrderCodeMap;
@@ -81,15 +82,18 @@ public class Order implements Comparable<Order>{
 		int orderCode=action.getCode();
 		switch (orderCode){
 		case ORDER_CODE_ATTACK:
-			System.out.println(src.getName()+"发动攻击");
+			//System.out.println(src.getName()+"发动攻击");
+			setActionTextDesc(src.getName()+"发动攻击");
 			src.attack(target);
 			break;
 		case ORDER_CODE_DEFENCE:
-			System.out.println("正在防御中...");
+			//System.out.println("正在防御中...");
+			setActionTextDesc(src.getName()+"正在防御中...");
 			break;
 		case ORDER_CODE_RUN:
+			//System.out.println(src.getName()+"逃跑");
+			setActionTextDesc(src.getName()+"逃跑");
 			src.run();
-			System.out.println(src.getName()+"逃跑");
 			break;
 		case ORDER_CODE_SPELL:
 			//TODO 完善魔法系统
@@ -109,10 +113,27 @@ public class Order implements Comparable<Order>{
 		int orderCode=action.getCode();
 		switch (orderCode){
 		case ORDER_CODE_DEFENCE:
-			System.out.println(src.getName()+"调整为防御姿态");
+			//System.out.println(src.getName()+"调整为防御姿态");
 			src.defence();
 			break;
 		}
 	}
+	
+	public void addResult(Result result){
+		results.add(result);
+	}
+	
+	public void setActionTextDesc(String desc){
+		actionTextDesc=desc;
+	}
+	public String getActionTextDesc(){
+		return actionTextDesc;
+	}
+	
+	public Result createResult(int type){
+		Result result = new Result(target, type);
+		return result;
+	}
+	
 	
 }

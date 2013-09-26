@@ -64,14 +64,17 @@ public class Battle1V1 {
 		//执行命令
 		for (i=0; i<orderList.size(); i++){
 			Order order = orderList.get(i);
-			//System.out.println(order);
+			//处理技能
 			order.execute();
-			ArrayList<Result> results=order.getResults();
 			
+			//显示结果
+			System.out.println( order.getActionTextDesc() );
+			ArrayList<Result> results=order.getResults();
 			resultAmount = results.size();
 			for (resultIndex=0; resultIndex<resultAmount; resultIndex++){
 				System.out.println(results.get(resultIndex));
 			}
+			
 			if (unitA.isCanNotBattle() || unitB.isCanNotBattle()){
 				end=true;
 				System.out.println("战斗结束");

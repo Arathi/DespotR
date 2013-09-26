@@ -9,6 +9,9 @@ public class SpellSystem {
 	public static final int ORDER_CODE_SPELL_SILENCE=14;
 	public static final int ORDER_CODE_SPELL_DRAGONFIRE=21;
 	
+	public static final int BUFFID_FIXED_SLEEP=Util.id2int("[aslp]"); //睡眠
+	public static final int BUFFID_FIXED_SLIENCE=Util.id2int("[asli]"); //沉默
+	
 	public static Map<String,Integer> SpellCodeMap;
 	
 	static{
@@ -19,47 +22,95 @@ public class SpellSystem {
 		SpellCodeMap.put("silence", ORDER_CODE_SPELL_SILENCE);
 		SpellCodeMap.put("dragonfire", ORDER_CODE_SPELL_DRAGONFIRE);
 	}
+	
+	private static void doHurt(Order order, double min, double max) {
+		Result result=order.createResult(Result.RESULT_TYPE_DAMAGE);
+//		result.type=Result.RESULT_TYPE_DAMAGE;
+		int damage = (int)( Util.getRandomReal(min, max) );
+		order.target.changeHp(-damage);
+		result.value = damage;
+		order.addResult(result);
+	}
+	private static void doHeal(Order order, double min, double max) {
+		Result result=order.createResult(Result.RESULT_TYPE_HEAL);
+//		result.type=Result.RESULT_TYPE_HEAL;
+		int delta =  (int)( Util.getRandomReal(min, max) );
+		order.target.changeHp(delta);
+		order.addResult(result);
+	}
+	private static void doBuff(Order order, int buffId, int min, int max) {
+		Result result=order.createResult(Result.RESULT_TYPE_BUFF);
+//		result.type=Result.RESULT_TYPE_BUFF;
+		int time = Util.getRandomInt(min, max+1);
+		order.target.setBuff(buffId, time);
+		order.addResult(result);
+	}
+	
+	private static void skillStep1Frame(
+			Order order, 
+			SkillInfo skill,
+			boolean ignoreSilence, 
+			boolean ignoreLowMana){
+		Result result = order.createResult(Result.RESULT_TYPE_NONE);
+		Unit srcUnit=order.src;
+		//首先，检查有没有处于“沉默”状态
+		if (!ignoreSilence){
+			if (srcUnit.checkBuff( BUFFID_FIXED_SLIENCE )){
+				//System.out.println(srcUnit.getName()+"处于沉默状态，无法使用咒文");
+				result.message=srcUnit.getName()+"处于沉默状态，无法使用咒文";
+				order.addResult(result);
+				return;
+			}
+		}
+		//然后，看看法力值是否足够施放该技能
+		if (!ignoreLowMana){
+			if (!srcUnit.changeMp(-skill.getMpCost(), false)){
+				//System.out.println("但是法力值不足，无法使用该咒文");
+				result.message="但是法力值不足，无法使用该咒文";
+				order.addResult(result);
+			}
+		}
+		result=null;
+	}
 
-	public static Result execute(Order order) {
+	public static void execute(Order order) {
 		// TODO 咒文处理
-		Result result = new Result();
-		SkillInfo info=(SkillInfo) order.action;
-		int spellCode=info.getParam();
-		boolean success=true;
-		int damage=0;
-		//System.out.println("咒文处理: "+spellCode);
+		//Result result = new Result();
+		SkillInfo skill=(SkillInfo) order.action;
+		int spellCode=skill.getParam();
 		if (spellCode==ORDER_CODE_SPELL_FIRE){
-			System.out.println("处理基拉系咒文");
-			//
+			//System.out.println("处理基拉系咒文");
+			order.setActionTextDesc(order.src.getName()+"施放"+skill.getName());
+			skillStep1Frame(order, skill, false, false);
+			doHurt(order, skill.getData(1), skill.getData(2));
 		}
 		if (spellCode==ORDER_CODE_SPELL_HEAL){
 			//System.out.println("处理荷伊米系咒文");
-			System.out.println(order.src.getName()+"施放"+info.getName());
-			//扣蓝
-			success=order.src.changeMp(-info.mpCost);
-			//治疗
-			if (success){
-				int healAmount=Util.getRandomInt(info.getData(1), info.getData(2));
-				order.target.changeHp(healAmount);
-			}
-			else{
-				System.out.println("但是法力值不足");
-			}
+			order.setActionTextDesc(order.src.getName()+"施放"+skill.getName());
+			skillStep1Frame(order, skill, false, false);
+			doHeal(order, skill.getData(1), skill.getData(2));
 		}
 		if (spellCode==ORDER_CODE_SPELL_SLEEP){
-			System.out.println("处理拉里荷系咒文");
-			
+			//System.out.println("处理拉里荷系咒文");
+			order.setActionTextDesc(order.src.getName()+"施放"+skill.getName());
+			skillStep1Frame(order, skill, false, false);
+			doBuff(order, BUFFID_FIXED_SLEEP, skill.getData(1), skill.getData(2) );
 		}
 		if (spellCode==ORDER_CODE_SPELL_SILENCE){
-			System.out.println("处理马荷东系咒文");
-			
+			//System.out.println("处理马荷东系咒文");
+			order.setActionTextDesc(order.src.getName()+"施放"+skill.getName());
+			skillStep1Frame(order, skill, false, false);
+			doBuff(order, BUFFID_FIXED_SLIENCE, skill.getData(1), skill.getData(2) );
 		}
 		if (spellCode==ORDER_CODE_SPELL_DRAGONFIRE){
 			//System.out.println("处理龙火系技能");
-			System.out.println(order.src.getName()+"吐出"+info.getName());
-			damage=Util.getRandomInt(info.getData(1), info.getData(2));
-			order.target.changeHp(-damage);
+			order.setActionTextDesc(order.src.getName()+"吐出"+skill.getName());
+			skillStep1Frame(order, skill, true, true);
+			doHurt(order, skill.getData(1), skill.getData(2) );
+			//damage=Util.getRandomInt(info.getData(1), info.getData(2));
+			//order.target.changeHp(-damage);
 		}
-		return result;
+		//order.addResult(result);
+		//result=null;
 	}
 }
