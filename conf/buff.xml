@@ -4,4 +4,8 @@
 <id>[bslp]</id>
 <desc>该单位睡着了……</desc>
 </buff>
+<buff>
+<id>[bsli]</id>
+<desc>该单位处于沉默状态</desc>
+</buff>
 </bufflist>

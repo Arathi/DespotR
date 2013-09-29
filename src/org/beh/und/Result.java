@@ -12,6 +12,8 @@ public class Result {
 	public static final int RESULT_TYPE_HEAL=2;
 	public static final int RESULT_TYPE_BUFF=3;
 	
+	//public static final int 
+	
 	Unit src;
 	Unit target;
 	int type;
@@ -38,11 +40,21 @@ public class Result {
 			}
 			else{
 				if (critFlag) result+="会心的一击！\n";
-				result+=targetName+"受到"+value+"点伤害";
+				if (value>0){
+					result+=targetName+"受到"+value+"点伤害";
+				}
+				else{
+					result+="但是"+targetName+"毫发无损";
+				}
 			}
 		}
 		if (type==RESULT_TYPE_HEAL){
-			result+=targetName+"得到"+value+"点治疗";
+			if (value>0){
+				result+=targetName+"得到"+value+"点治疗";
+			}
+			else{
+				result+="但是，好像没什么效果";
+			}
 		}
 		if (type==RESULT_TYPE_BUFF){
 			result+=targetName;

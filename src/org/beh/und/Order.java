@@ -74,7 +74,6 @@ public class Order implements Comparable<Order>{
 	 * 结果保存到结果表(results)中
 	 */
 	public void execute(){
-		//TODO 实现 命令的执行(实现魔法)
 		results=new ArrayList<Result>();
 		if (src.isCanNotBattle()){
 			return;
@@ -82,18 +81,15 @@ public class Order implements Comparable<Order>{
 		int orderCode=action.getCode();
 		switch (orderCode){
 		case ORDER_CODE_ATTACK:
-			//System.out.println(src.getName()+"发动攻击");
 			setActionTextDesc(src.getName()+"发动攻击");
-			src.attack(target);
+			addResult(src.attack(target));
 			break;
 		case ORDER_CODE_DEFENCE:
-			//System.out.println("正在防御中...");
 			setActionTextDesc(src.getName()+"正在防御中...");
 			break;
 		case ORDER_CODE_RUN:
-			//System.out.println(src.getName()+"逃跑");
 			setActionTextDesc(src.getName()+"逃跑");
-			src.run();
+			addResult(src.run());
 			break;
 		case ORDER_CODE_SPELL:
 			//TODO 完善魔法系统

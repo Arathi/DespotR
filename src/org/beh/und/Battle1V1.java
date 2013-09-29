@@ -43,6 +43,10 @@ public class Battle1V1 {
 	}
 	
 	public void handle(){
+		//¼ÆËãBuff
+		unitA.buffsDecrement();
+		unitB.buffsDecrement();
+		
 		//ÖØÖÃ×ËÌ¬
 		unitA.resetPosture();
 		unitB.resetPosture();
