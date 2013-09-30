@@ -272,8 +272,8 @@ public abstract class Unit {
 		return null;
 	}
 
+	@Deprecated
 	public boolean changeMp(int delta, boolean testOnly) {
-		// TODO Auto-generated method stub
 		// if () //不可思议的帽子类物品特效，减少法力消耗
 		int tmp = mp + delta;
 		if (tmp > max_mp) {
@@ -285,6 +285,13 @@ public abstract class Unit {
 		if (!testOnly)
 			mp = tmp;
 		return true;
+	}
+	
+	public boolean changeMp(int delta) {
+		return changeMp(delta, false);
+	}
+	public boolean checkMp(int delta){
+		return changeMp(delta, true);
 	}
 
 	public boolean checkBuff(int buffId) {

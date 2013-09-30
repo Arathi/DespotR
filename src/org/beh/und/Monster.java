@@ -84,13 +84,21 @@ public class Monster extends Unit {
 		int orderId=actions[actionIndex];
 		ActionInfo action=ActionInfo.getActionInfo(orderId);
 		if (action==null){
-			//TODO 从技能表中找出改orderId对应的技能
-//			int skillId = findSkillByOrder(orderId);
-//			action = SkillInfo.getSkillInfo(skillId);
 			action = findSkillInfoByOrder(orderId);
+			//TODO 检测无法施法情况(除了沉默和法力值不足)，转换为attack
+			if (action != null){
+				SkillInfo skill = (SkillInfo)action;
+				if (checkBuff(SpellSystem.BUFFID_FIXED_SLIENCE)){
+					action = null; //被沉默，无法施法
+				}
+				else if (checkMp(-skill.getMpCost())==false){
+					action = null; //法力值不足，无法施法
+				}
+			}
+			
 		}
 		if (action==null){
-			System.out.println("未识别的orderId: "+orderId);
+			//System.out.println("未识别的orderId: "+orderId);
 			action=ActionInfo.getActionInfo("attack".hashCode());
 		}
 		//选择目标单位
