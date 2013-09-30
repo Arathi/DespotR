@@ -110,7 +110,6 @@ public abstract class Unit {
 	 */
 	public Result attack(Unit target) {
 		Result result = new Result(target, Result.RESULT_TYPE_DAMAGE);
-		// result.type=;
 		if (target == null) {
 			result.success = false;
 			result.message = "但攻击的目标并不存在";
@@ -122,7 +121,6 @@ public abstract class Unit {
 		if (jinkRand <= target.getJink())
 			jinkFlag = true;
 		if (jinkFlag) { // 闪避的情况
-			// System.out.println("但是"+target.getName()+"躲开了");
 			result.success = false;
 			result.message = "但是" + target.getName() + "躲开了";
 		} else { // 正常
@@ -139,14 +137,16 @@ public abstract class Unit {
 				damageMax = (atk - target.getDef() * 0.5) * 0.55;
 			} else {
 				// 会心一击 攻击伤害=(攻击力*0.5+1~攻击力)
-				// System.out.println("会心的一击！");
 				damageMin = atk * 0.5 + 1;
 				damageMax = atk;
 			}
 			damageR = Util.getRandomReal(damageMin, damageMax);
+			//如果计算结果为负，也可能造成1点伤害
+			if (damageR<0) damageR=Util.getRandomReal(0, 2);
 			int damage = (int) (damageR);
 			int real_damage = target.changeHp(-damage);
 			result.value = -real_damage;
+			result.deathFlag = isCanNotBattle();
 		}
 		result.critFlag = critFlag;
 		result.jinkFlag = jinkFlag;
@@ -162,26 +162,22 @@ public abstract class Unit {
 	 */
 	public int changeHp(int delta) {
 		int old_hp = hp;
-		boolean deadFlag = false;
+		//boolean deadFlag = false;
 		hp += delta;
 		if (hp > max_hp) {
 			hp = max_hp;
 		}
 		if (hp < 0) {
 			hp = 0;
-			deadFlag = true;
+			//deadFlag = true;
 		}
 		int real_delta = hp - old_hp;
-		if (real_delta < 0) {
-			// System.out.println(name+"受到"+(-real_delta)+"点伤害");
-			if (deadFlag) {
-				// System.out.println(name+"领便当了");
-			}
-		} else if (real_delta > 0) {
-			// System.out.println(name+"得到"+real_delta+"点治疗");
-		} else {
-			// System.out.println("但是没有效果");
-		}
+//		if (real_delta < 0) {
+//			if (deadFlag) {
+//			}
+//		} else if (real_delta > 0) {
+//		} else {
+//		}
 		return real_delta;
 	}
 
@@ -208,6 +204,9 @@ public abstract class Unit {
 	 */
 	public void resetPosture() {
 		// TODO 添加睡眠Buff的影响
+		if (checkBuff(SpellSystem.BUFFID_FIXED_SLEEP)){
+			posture = POSTURE_NONE;
+		}
 		posture = POSTURE_ATTACK;
 	}
 
@@ -277,7 +276,7 @@ public abstract class Unit {
 	}
 
 	@Deprecated
-	public boolean changeMp(int delta, boolean testOnly) {
+	private boolean changeMp(int delta, boolean testOnly) {
 		// if () //不可思议的帽子类物品特效，减少法力消耗
 		int tmp = mp + delta;
 		if (tmp > max_mp) {
@@ -296,6 +295,9 @@ public abstract class Unit {
 	}
 	public boolean checkMp(int delta){
 		return changeMp(delta, true);
+	}
+	public boolean costMp(int cost){
+		return changeMp(-cost, false);
 	}
 
 	public boolean checkBuff(int buffId) {

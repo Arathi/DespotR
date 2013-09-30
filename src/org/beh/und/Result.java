@@ -20,6 +20,7 @@ public class Result {
 	int value; //治疗量、伤害量、效果回合数等
 	boolean critFlag; //致命一击
 	boolean jinkFlag; //闪避
+	boolean deathFlag; //致死
 	boolean success; //动作执行结果为成功
 	//boolean sleepFlag; //睡眠标志
 	//boolean scienceFlag; //沉默标志

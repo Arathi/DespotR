@@ -25,7 +25,6 @@ public class SpellSystem {
 	
 	private static void doHurt(Order order, double min, double max) {
 		Result result=order.createResult(Result.RESULT_TYPE_DAMAGE);
-//		result.type=Result.RESULT_TYPE_DAMAGE;
 		int damage = (int)( Util.getRandomReal(min, max) );
 		int delta = order.target.changeHp(-damage);
 		result.value = -delta;
@@ -34,7 +33,6 @@ public class SpellSystem {
 	
 	private static void doHeal(Order order, double min, double max) {
 		Result result=order.createResult(Result.RESULT_TYPE_HEAL);
-//		result.type=Result.RESULT_TYPE_HEAL;
 		int health = (int)( Util.getRandomReal(min, max) );
 		int delta = order.target.changeHp(health);
 		result.value = delta;
@@ -43,7 +41,6 @@ public class SpellSystem {
 	
 	private static void doBuff(Order order, int buffId, int min, int max) {
 		Result result=order.createResult(Result.RESULT_TYPE_BUFF);
-//		result.type=Result.RESULT_TYPE_BUFF;
 		int time = Util.getRandomInt(min, max+1);
 		order.target.setBuff(buffId, time);
 		result.value=buffId;
@@ -68,7 +65,7 @@ public class SpellSystem {
 		}
 		//然后，看看法力值是否足够施放该技能
 		if (!ignoreLowMana){
-			if (!srcUnit.changeMp(-skill.getMpCost(), false)){
+			if (!srcUnit.costMp(skill.getMpCost())){
 				result.message="但是法力值不足，无法使用该咒文";
 				order.addResult(result);
 				return false;

@@ -12,7 +12,6 @@ public class Battle1V1 {
 	
 	protected ArrayList<Order> orderList;
 	
-	
 	public Battle1V1(Unit a, Unit b){
 		addToForceA(a);
 		addToForceB(b);
@@ -25,16 +24,13 @@ public class Battle1V1 {
 	public void setEnemyForAll(){
 		unitA.enemy=unitB;
 		unitB.enemy=unitA;
-		//System.out.println("敌对目标设置完成");
 	}
 	
 	public void addToForceA(Unit u){
 		unitA=u;
-		//System.out.println(u.getName()+"加入战斗");
 	}
 	public void addToForceB(Unit u){
 		unitB=u;
-		//System.out.println(u.getName()+"加入战斗");
 	}
 	
 	public void sortOrderList(){
