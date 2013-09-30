@@ -243,6 +243,10 @@ public abstract class Unit {
 			result.success = false;
 			result.message = "但是逃跑失败";
 		}
+		else{
+			result.success = true;
+			result.message = "逃跑成功";
+		}
 		return result;
 	}
 
@@ -345,6 +349,13 @@ public abstract class Unit {
 				break;
 			}
 		}
+	}
+
+	/**
+	 * Hero请重写这个方法
+	 */
+	public int getAtk() {
+		return atk;
 	}
 
 }

@@ -33,7 +33,7 @@ public class Util {
 	 *            最小取值
 	 * @param max
 	 *            最大取值
-	 * @return 介于min和max之间的实数
+	 * @return (min,max)之间的实数
 	 */
 	public static double getRandomReal(double min, double max) {
 		double delta = max - min;
@@ -49,7 +49,7 @@ public class Util {
 	 *            最小取值
 	 * @param max
 	 *            最大取值
-	 * @return 介于min和max之间的整数
+	 * @return 生成[min,max)之间的随机整数
 	 */
 	public static int getRandomInt(int min, int max) {
 		int delta = max - min;

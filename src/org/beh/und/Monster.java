@@ -32,12 +32,14 @@ public class Monster extends Unit {
 			this.actions[i]=actions[i];
 		}
 		//决定第一个actionIndex
-		if (actionMode==MonsterInfo.ACTION_MODE_FIXED){
-			actionIndex=0;
-		}
-		else {
-			actionIndex=Util.getRandomInt(0, 8);
-		}
+		actionIndex=-1; //初始化后会变为[0,7]内的数
+		setNextActionIndex();
+//		if (actionMode==MonsterInfo.ACTION_MODE_FIXED){
+//			actionIndex=0;
+//		}
+//		else {
+//			actionIndex=Util.getRandomInt(0, 8);
+//		}
 	}
 	
 	/**
@@ -80,8 +82,18 @@ public class Monster extends Unit {
 	@Override
 	public Order selectOrder() {
 		Order order=null;
+		int orderId = 0;
+
+		//战斗力不足时，逃跑
+		if (getAtk()*2<enemy.getAtk()){
+			orderId = "run".hashCode();
+			order = new Order( this, null, ActionInfo.getActionInfo(orderId) );
+			setNextActionIndex();
+			return order;
+		}
+		
 		//获取命令对应的动作
-		int orderId=actions[actionIndex];
+		orderId=actions[actionIndex];
 		ActionInfo action=ActionInfo.getActionInfo(orderId);
 		if (action==null){
 			action = findSkillInfoByOrder(orderId);
@@ -105,8 +117,16 @@ public class Monster extends Unit {
 		Unit target=selectTarget(action);
 		//创建命令
 		order=new Order(this, target, action);
-		//System.out.println(order);
 		//计算AI的下一个命令
+		setNextActionIndex();
+		//结束
+		return order;
+	}
+	
+	/**
+	 * 设置下一个Action索引
+	 */
+	private void setNextActionIndex(){
 		if (actionMode==MonsterInfo.ACTION_MODE_FIXED){
 			actionIndex++;
 			if (actionIndex>=MonsterInfo.ACTION_AMOUNT){
@@ -114,10 +134,8 @@ public class Monster extends Unit {
 			}
 		}
 		else{
-			actionIndex=Util.getRandomInt(0, 7);
+			actionIndex=Util.getRandomInt(0, MonsterInfo.ACTION_AMOUNT);
 		}
-		//结束
-		return order;
 	}
 	
 	/**
