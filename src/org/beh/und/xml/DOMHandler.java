@@ -1,6 +1,6 @@
 package org.beh.und.xml;
 
-public class DOMHandler extends XMLHandler {
+public abstract class DOMHandler extends XMLHandler {
 
 	@Override
 	public int initMonsters() {

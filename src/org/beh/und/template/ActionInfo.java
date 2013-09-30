@@ -1,6 +1,10 @@
-package org.beh.und;
+package org.beh.und.template;
 
 import java.util.*;
+
+import org.beh.und.Order;
+import org.beh.und.SpellSystem;
+import org.beh.und.Util;
 
 /**
  * <b>动作信息类</b>
@@ -34,15 +38,6 @@ public class ActionInfo {
 	
 	protected int targetType;
 	protected int targetRange;
-	
-//	<action>
-//		<id>[aatk]</id>
-//		<string>attack</string>
-//		<name>攻撃</name>
-//		<type>enemy,single</type>
-//		<code>attack</code>
-//		<desc>攻击伤害=(攻方攻击力-守方守备力*50%)*45~55%</desc>
-//	</action>
 
 	public int getId() {
 		return objectId;

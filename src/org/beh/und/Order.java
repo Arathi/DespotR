@@ -2,6 +2,8 @@ package org.beh.und;
 
 import java.util.*;
 
+import org.beh.und.template.*;
+
 /**
  * <b>ÃüÁîÀà</b>
  * <br/>

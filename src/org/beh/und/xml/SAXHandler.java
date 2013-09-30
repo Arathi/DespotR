@@ -1,6 +1,6 @@
 package org.beh.und.xml;
 
-public class SAXHandler extends XMLHandler {
+public abstract class SAXHandler extends XMLHandler {
 
 	@Override
 	public int initMonsters() {

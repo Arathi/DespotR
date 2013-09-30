@@ -1,34 +1,14 @@
-package org.beh.und;
+package org.beh.und.template;
 
 import java.util.*;
+
+import org.beh.und.Util;
 
 public class SkillInfo extends ActionInfo {
 	public static SkillInfo[] skillInfoList;
 	public static Map<Integer, Integer> skillIdMap;
 	
 	public static final int SkillDataAmount = 8;
-
-//	<action>
-//		<id>[aatk]</id>
-//		<string>attack</string>
-//		<name>攻撃</name>
-//		<type>enemy,single</type>
-//		<code>attack</code>
-//		<desc>攻击伤害=(攻方攻击力-守方守备力*50%)*45~55%</desc>
-//	</action>
-//	<skill>
-//		<id>[hoim]</id>
-//		<name>ホイミ</name>
-//		<cnname>荷伊米</cnname> 
-//		<desc>我方HP+25~30</desc>
-//		<mpcost>3</mpcost>
-//		<learnlevel>3</learnlevel>
-//		<string>hoimi</string>
-//		<code>heal</code>
-//		<type>ally,single</type>
-//		<data1>25</data1>
-//		<data2>30</data2>
-//	</skill>
 
 	protected int mpCost;
 	protected int learnLevel;

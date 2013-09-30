@@ -1,65 +1,66 @@
 package org.beh.und.xml;
 
 import org.beh.und.*;
+import org.beh.und.template.*;
 
 public abstract class XMLHandler {
 	public abstract int initMonsters();
 	public abstract int initActions();
 	public abstract int initSkills();
+	public abstract int initBuffs();
 	
 	public boolean setMonsterParam(MonsterInfo monsterInfo, String paramName, String paramValue){
-		String name=paramName, strValue=paramValue,  resistType;
+		String resistType;
 		int intValue, resistIndex=0;
-		if (name.equals("id")){
-			strValue = paramValue.substring(3);
-			intValue = Util.toInteger(strValue);
+		if (paramName.equals("id")){
+			paramValue = paramValue.substring(3);
+			intValue = Util.toInteger(paramValue);
 			monsterInfo.setId(intValue);
 		}
-		if (name.endsWith("name")){
-			//strValue = parser.nextText();
-			monsterInfo.setName(strValue);
+		if (paramName.endsWith("name")){
+			monsterInfo.setName(paramValue);
 		}
-		if (name.equals("hp")){
-			intValue = Util.toInteger(strValue);
+		if (paramName.equals("hp")){
+			intValue = Util.toInteger(paramValue);
 			monsterInfo.setHp(intValue);
 		}
-		if (name.equals("mp")){
-			intValue = Util.toInteger(strValue);
+		if (paramName.equals("mp")){
+			intValue = Util.toInteger(paramValue);
 			monsterInfo.setMp(intValue);
 		}
-		if (name.equals("atk")){
-			intValue = Util.toInteger(strValue);
+		if (paramName.equals("atk")){
+			intValue = Util.toInteger(paramValue);
 			monsterInfo.setAtk(intValue);
 		}
-		if (name.equals("def")){
-			intValue = Util.toInteger(strValue);
+		if (paramName.equals("def")){
+			intValue = Util.toInteger(paramValue);
 			monsterInfo.setDef(intValue);
 		}
-		if (name.equals("agi")){
-			intValue = Util.toInteger(strValue);
+		if (paramName.equals("agi")){
+			intValue = Util.toInteger(paramValue);
 			monsterInfo.setAgi(intValue);
 		}
-		if (name.equals("jink")){
-			intValue = Util.toInteger(strValue);
+		if (paramName.equals("jink")){
+			intValue = Util.toInteger(paramValue);
 			monsterInfo.setJink(intValue);
 		}
-		if (name.equals("inte")){
-			intValue = Util.toInteger(strValue);
+		if (paramName.equals("inte")){
+			intValue = Util.toInteger(paramValue);
 			monsterInfo.setInte(intValue);
 		}
-		if (name.equals("exp")){
-			intValue = Util.toInteger(strValue);
+		if (paramName.equals("exp")){
+			intValue = Util.toInteger(paramValue);
 			monsterInfo.setExp(intValue);
 		}
-		if (name.equals("gold")){
-			intValue = Util.toInteger(strValue);
+		if (paramName.equals("gold")){
+			intValue = Util.toInteger(paramValue);
 			monsterInfo.setGold(intValue);
 		}
-		if (name.startsWith("resist")){
-			resistType=name.substring(6);
-			String resistPair=strValue;
+		if (paramName.startsWith("resist")){
+			resistType=paramName.substring(6);
+			String resistPair=paramValue;
 			//intValue=toInteger();
-			//TODO 类型可配置化改造
+			//TODO 抗性类型可配置化改造
 			if (resistType.equals("gira")){
 				resistIndex=1;
 			}
@@ -78,60 +79,53 @@ public abstract class XMLHandler {
 				}
 			}
 		}
-		if (name.startsWith("action")){
-			int actionOrder=Util.toInteger(name.substring(6));
+		if (paramName.startsWith("action")){
+			int actionOrder=Util.toInteger(paramName.substring(6));
 			if (actionOrder>0 || actionOrder<=8){
-				//strValue = parser.nextText();
-				//monsterInfo.setActionString(actionOrder-1, strValue);
-				//intValue = ActionInfo.getActionId(strValue);
-				//intValue = strValue.hashCode();
-				monsterInfo.setAction(actionOrder-1, strValue);
+				monsterInfo.setAction(actionOrder-1, paramValue);
 			}
 		}
-		if (name.equals("actmode")){
-			//strValue=parser.nextText();
-			if (strValue.equals("fixed")){
+		if (paramName.equals("actmode")){
+			if (paramValue.equals("fixed")){
 				monsterInfo.setActmode(MonsterInfo.ACTION_MODE_FIXED);
 			}
 			else{
 				monsterInfo.setActmode(MonsterInfo.ACTION_MODE_RANDOM);
 			}
 		}
-		if (name.equals("skill")){
-			//strValue=parser.nextText(); //获取技能ID
-			intValue=Util.id2int(strValue);
+		if (paramName.equals("skill")){
+			intValue=Util.id2int(paramValue);
 			if (intValue!=0){
 				monsterInfo.getSkills().add(intValue);
 			}
 			else{
-				System.out.println("读取到错误的技能ID: "+strValue);
+				System.out.println("读取到错误的技能ID: "+paramValue);
 				return false;
 			}
 		}
 		return true;
 	}
+	
 	public boolean setActionParam(ActionInfo actionInfo, String paramName, String paramValue){
-		String name=paramName;
 		int id=0;
 		boolean findParam=true;
-		if (name.equals("id")){
-			//id=Util.toInteger(paramValue);
+		if (paramName.equals("id")){
 			id = Util.id2int(paramValue);
 			actionInfo.setId(id);
 		}
-		else if (name.equals("string")){
+		else if (paramName.equals("string")){
 			actionInfo.setOrderString(paramValue);
 		}
-		else if (name.endsWith("name")){
+		else if (paramName.endsWith("name")){
 			actionInfo.setName(paramValue);
 		}
-		else if (name.equals("desc")){
+		else if (paramName.equals("desc")){
 			actionInfo.setDescription(paramValue);
 		}
-		else if (name.equals("code")){
+		else if (paramName.equals("code")){
 			actionInfo.setCode(paramValue);
 		}
-		else if (name.equals("type")){
+		else if (paramName.equals("type")){
 			String[] targetTypes=paramValue.split(",");
 			int i, size=targetTypes.length;
 			for (i=0; i<size; i++){
@@ -160,6 +154,7 @@ public abstract class XMLHandler {
 		}
 		return findParam;
 	}	
+	
 	public boolean setSkillParam(SkillInfo skillInfo, String paramName, String paramValue){
 		String name=paramName;
 		int intValue;
@@ -177,6 +172,9 @@ public abstract class XMLHandler {
 			intValue=Util.toInteger(name.substring(4));
 			skillInfo.setData(intValue, Util.toInteger(paramValue) );
 		}
+		return true;
+	}
+	public boolean setBuffParam(BuffInfo buffInfo, String paramName, String paramValue){
 		return true;
 	}
 }

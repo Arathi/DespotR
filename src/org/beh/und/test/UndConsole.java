@@ -1,6 +1,9 @@
 package org.beh.und.test;
 
 import org.beh.und.*;
+import org.beh.und.template.ActionInfo;
+import org.beh.und.template.MonsterInfo;
+import org.beh.und.template.SkillInfo;
 
 public class UndConsole {
 

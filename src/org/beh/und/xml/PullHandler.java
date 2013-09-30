@@ -1,7 +1,7 @@
 package org.beh.und.xml;
 
 import org.xmlpull.v1.*;
-import org.beh.und.*;
+import org.beh.und.template.*;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -281,5 +281,11 @@ public class PullHandler extends XMLHandler {
 			System.out.println("载入"+(skillAmount-1)+"种技能数据");
 		}
 		return skillAmount;
+	}
+
+	@Override
+	public int initBuffs() {
+		// TODO 实现载入Buff列表
+		return 0;
 	}
 }

@@ -1,6 +1,9 @@
-package org.beh.und;
+package org.beh.und.template;
 
 import java.util.*;
+
+import org.beh.und.Monster;
+import org.beh.und.Util;
 
 public class MonsterInfo {
 	public static final int ACTION_MODE_RANDOM = 0;

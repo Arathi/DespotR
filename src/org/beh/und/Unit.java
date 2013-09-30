@@ -2,6 +2,8 @@ package org.beh.und;
 
 import java.util.*;
 
+import org.beh.und.template.*;
+
 public abstract class Unit {
 	// ×ËÌ¬³£Á¿
 	public static final int POSTURE_NONE = 0;

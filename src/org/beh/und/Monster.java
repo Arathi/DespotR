@@ -2,6 +2,8 @@ package org.beh.und;
 
 import java.util.ArrayList;
 
+import org.beh.und.template.*;
+
 public class Monster extends Unit {
 	int actionIndex;
 	int actionListSize;

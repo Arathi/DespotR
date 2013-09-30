@@ -2,6 +2,8 @@ package org.beh.und;
 
 import java.util.*;
 
+import org.beh.und.template.*;
+
 public class SpellSystem {
 	public static final int ORDER_CODE_SPELL_FIRE=11;
 	public static final int ORDER_CODE_SPELL_HEAL=12;
