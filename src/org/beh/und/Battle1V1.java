@@ -3,57 +3,59 @@ package org.beh.und;
 import java.util.ArrayList;
 import java.util.Collections;
 
-public class Battle1V1 {
+public class Battle1V1 extends Battle {
 	protected Unit unitA;
 	protected Unit unitB;
 	
-	protected int turnCounter;
-	protected boolean end;
-	
-	protected ArrayList<Order> orderList;
-	
+
 	public Battle1V1(Unit a, Unit b){
+		init();
 		addToForceA(a);
 		addToForceB(b);
-		setEnemyForAll();
-		orderList=new ArrayList<Order>();
-		end=false;
-		turnCounter=1;
+		
+		setEnemys();
 	}
 	
-	public void setEnemyForAll(){
-		unitA.enemy=unitB;
-		unitB.enemy=unitA;
-	}
-	
+	@Override
 	public void addToForceA(Unit u){
 		unitA=u;
 	}
+	
+	@Override
 	public void addToForceB(Unit u){
 		unitB=u;
 	}
 	
-	public void sortOrderList(){
-		//orderList;
-		Collections.sort(orderList);
+	@Override
+	public void setEnemys(){
+		unitA.enemy=unitB;
+		unitB.enemy=unitA;
 	}
 	
-	public void handle(){
-		//º∆À„Buff
+	@Override
+	public void allUnitBuffsDecrement(){
 		unitA.buffsDecrement();
 		unitB.buffsDecrement();
-		
-		//÷ÿ÷√◊ÀÃ¨
+	}
+	
+	@Override
+	public void allUnitResetPosture(){
 		unitA.resetPosture();
 		unitB.resetPosture();
-		
-		// ’ºØ√¸¡Ó
+	}
+	
+	@Override
+	public void allUnitSelectOrders(){
 		orderList.clear();
 		orderList.add(unitA.selectOrder());
 		orderList.add(unitB.selectOrder());
-		//unitB.selectOrder();
-		//≈≈–Ú
-		sortOrderList();
+		sortOrderList(); //≈≈–Ú
+	}
+	
+	public void handle(){
+		allUnitBuffsDecrement(); //º∆À„Buff
+		allUnitResetPosture(); //÷ÿ÷√◊ÀÃ¨
+		allUnitSelectOrders(); //// ’ºØ√¸¡Ó
 		
 		int i, resultAmount, resultIndex;
 		//√¸¡Ó‘§¥¶¿Ì
@@ -85,10 +87,6 @@ public class Battle1V1 {
 		System.out.println(unitA);
 		System.out.println(unitB);
 		turnCounter++;
-	}
-
-	public boolean isEnd() {
-		return end;
 	}
 	
 }
