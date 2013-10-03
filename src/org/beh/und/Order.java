@@ -19,7 +19,7 @@ public class Order implements Comparable<Order>{
 	public static final int ORDER_CODE_SPELL=5;
 	
 	protected Unit src;
-	protected Unit target;
+	protected List<Unit> targets;
 	
 	//protected int type;
 	//protected int actionId;
@@ -44,10 +44,9 @@ public class Order implements Comparable<Order>{
 		OrderCodeMap.put("spell", ORDER_CODE_SPELL);
 	}
 	
-	public Order(Unit src, Unit target, ActionInfo action){
+	public Order(Unit src, List<Unit> targets, ActionInfo action){
 		this.src=src;
-		this.target=target;
-		//this.actionId=actionId;
+		this.targets=targets;
 		this.action=action;
 		agi=src.getAgi();
 	}
@@ -60,6 +59,9 @@ public class Order implements Comparable<Order>{
 		return results;
 	}
 	
+	/**
+	 * 用于命令排序
+	 */
 	@Override
 	public int compareTo(Order other) {
 		if (agi>other.getAgi()){
@@ -84,7 +86,7 @@ public class Order implements Comparable<Order>{
 		switch (orderCode){
 		case ORDER_CODE_ATTACK:
 			setActionTextDesc(src.getName()+"发动攻击");
-			addResult(src.attack(target));
+			addResult(src.attack(targets.get(0)));
 			break;
 		case ORDER_CODE_DEFENCE:
 			setActionTextDesc(src.getName()+"正在防御中...");
@@ -128,7 +130,13 @@ public class Order implements Comparable<Order>{
 		return actionTextDesc;
 	}
 	
-	public Result createResult(int type){
+//	@Deprecated
+//	public Result createResult(int type){
+//		Result result = new Result(targets.get(0), type);
+//		return result;
+//	}
+	
+	public Result createResult(Unit target, int type){
 		Result result = new Result(target, type);
 		return result;
 	}

@@ -1,6 +1,6 @@
 package org.beh.und;
 
-import java.util.ArrayList;
+import java.util.*;
 
 import org.beh.und.template.*;
 
@@ -77,17 +77,17 @@ public class Monster extends Unit {
 		info=name+"("+hp+"/"+max_hp+", "+mp+"/"+max_mp+", A"+atk+", D"+def+")";
 		return info;
 	}
+	
 	/**
 	 * 选取命令
 	 * @return 选取的命令
 	 */
-	@Override
 	public Order selectOrder() {
 		Order order=null;
 		int orderId = 0;
 
 		//战斗力不足时，逃跑
-		if (getAtk()*2<enemy.getAtk()){
+		if (getAtk()*2<enemys.getAtkSum()){
 			orderId = "run".hashCode();
 			order = new Order( this, null, ActionInfo.getActionInfo(orderId) );
 			setNextActionIndex();
@@ -116,13 +116,19 @@ public class Monster extends Unit {
 			action=ActionInfo.getActionInfo("attack".hashCode());
 		}
 		//选择目标单位
-		Unit target=selectTarget(action);
+		List<Unit> targets=selectTarget(action);
 		//创建命令
-		order=new Order(this, target, action);
+		order=new Order(this, targets, action);
 		//计算AI的下一个命令
 		setNextActionIndex();
 		//结束
 		return order;
+	}
+	
+	@Override
+	public void selectOrders(List<Order> orderList){
+		Order order = selectOrder();
+		orderList.add(order);
 	}
 	
 	/**
@@ -145,24 +151,45 @@ public class Monster extends Unit {
 	 * @param actionId 动作ID
 	 * @return 选取的目标单位
 	 */
-	public Unit selectTarget(ActionInfo actionInfo){
+	public List<Unit> selectTarget(ActionInfo actionInfo){
 		//TODO 多单位化
+		List<Unit> targets=null;
 		Unit target=null;
 //		ActionInfo actionInfo = ActionInfo.getActionInfo(actionId);
 		int targetSide = actionInfo.getTargetUnitSide();
+		int targetAmount = actionInfo.getTargetRange();
 		if (targetSide==ActionInfo.TARGET_TYPE_ENEMY){
 			//System.out.println("选择敌人为目标");
-			target = enemy;
+			if (targetAmount == ActionInfo.TARGET_RANGE_SINGlE){
+				target = enemys.getSingleUnit(0);
+			}
+			else{
+				targets = enemys.getAllUnits(0);
+			}
 		}
 		else if (targetSide==ActionInfo.TARGET_TYPE_ALLY){
 			//System.out.println("选择自己为目标");
-			target = this;
+			if (targetAmount == ActionInfo.TARGET_RANGE_SINGlE){
+				//target = enemys.getSingleUnit(0);
+				target = this;
+			}
+			else{
+				//TODO 选择多个友军单位
+				target = this;
+			}
 		}
 		else {
 			//System.out.println("没有选择目标");
 			target = null;
 		}
-		return target;
+		if (targets==null && target==null){
+			return null;
+		}
+		if (targets==null && target!=null){
+			targets = new ArrayList<Unit>();
+			targets.add(target);
+		}
+		return targets;
 	}
 	
 }

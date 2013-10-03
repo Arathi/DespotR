@@ -1,39 +1,33 @@
 package org.beh.und;
 
-import java.util.ArrayList;
-import java.util.Collections;
+import java.util.*;
 
-public class Battle {
-	public Force forceA, forceB;
+public abstract class Battle {
+	protected IBattleFlow forceA, forceB;
 	
 	protected int turnCounter;
 	protected boolean end;
 	protected ArrayList<Order> orderList;
 	
-	public void addToForceA(Unit u){
-		if (forceA==null) forceA=new Force();
-		forceA.addUnit(u);
-	}
-	public void addToForceB(Unit u){
-		if (forceB==null) forceB=new Force();
-		forceB.addUnit(u);
-	}
+	public abstract void addToForceA(Unit u);
+	public abstract void addToForceB(Unit u);
 	
-	public void setEnemys(){
-		forceA.setEnemyForce(forceB);
-		forceB.setEnemyForce(forceA);
-	}
+//	public void setEnemys(){
+//		forceA.setEnemys(forceB);
+//		forceB.setEnemys(forceA);
+//	}
 	
 	public void init(){
 		orderList=new ArrayList<Order>();
 		end=false;
 		turnCounter=1;
+		
+		allUnitAddToBattle(); //所有单位进入战斗
 	}
 	
 	/**
 	 * 命令表排序
 	 */
-	//TODO 生成命令队列
 	public void sortOrderList(){
 		Collections.sort(orderList);
 	}
@@ -48,7 +42,7 @@ public class Battle {
 	public void handle(){
 		allUnitBuffsDecrement(); //计算Buff
 		allUnitResetPosture(); //重置姿态
-		allUnitSelectOrders(); ////收集命令
+		allUnitSelectOrders(); //收集命令
 		
 		int i, resultAmount, resultIndex;
 		//命令预处理
@@ -82,21 +76,33 @@ public class Battle {
 		turnCounter++;
 	}
 	
-	public void allUnitSelectOrders() {
-		// TODO Auto-generated method stub
-		forceA.selectOrders();
-		forceB.selectOrders();
-	}
-	public void allUnitResetPosture() {
-		// TODO Auto-generated method stub
-		forceA.resetPosture();
-		forceB.resetPosture();
-	}
-	public void allUnitBuffsDecrement() {
-		// TODO Auto-generated method stub
+//	public abstract void allUnitSelectOrders();
+//	public abstract void allUnitResetPosture();
+//	public abstract void allUnitBuffsDecrement();
+//	public abstract void allUnitAddToBattle();
+	
+	public void allUnitBuffsDecrement(){
 		forceA.buffsDecrement();
 		forceB.buffsDecrement();
 	}
 	
+	public void allUnitResetPosture(){
+		forceA.resetPosture();
+		forceB.resetPosture();
+	}
 	
+	public void allUnitSelectOrders(){
+		orderList.clear();
+		forceA.selectOrders(orderList);
+		forceB.selectOrders(orderList);
+		sortOrderList(); //排序
+	}
+	
+	public void allUnitAddToBattle() {
+		forceA.setBattleEnvForAll(this);
+		forceB.setBattleEnvForAll(this);
+		
+		forceA.setEnemys(forceB);
+		forceB.setEnemys(forceA);
+	}
 }

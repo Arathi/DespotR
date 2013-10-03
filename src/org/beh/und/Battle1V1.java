@@ -1,57 +1,62 @@
 package org.beh.und;
 
-import java.util.ArrayList;
-import java.util.Collections;
+import java.util.*;
 
 public class Battle1V1 extends Battle {
-	protected Unit unitA;
-	protected Unit unitB;
-	
+//	protected Unit unitA;
+//	protected Unit unitB;
 
 	public Battle1V1(Unit a, Unit b){
-		init();
 		addToForceA(a);
 		addToForceB(b);
-		
-		setEnemys();
+
+		init();
 	}
 	
 	@Override
 	public void addToForceA(Unit u){
-		unitA=u;
+		//unitA=u;
+		forceA=u;
 	}
 	
 	@Override
 	public void addToForceB(Unit u){
-		unitB=u;
+		//unitB=u;
+		forceB=u;
 	}
 	
+//	@Override
+//	public void allUnitBuffsDecrement(){
+//		unitA.buffsDecrement();
+//		unitB.buffsDecrement();
+//	}
+//	
+//	@Override
+//	public void allUnitResetPosture(){
+//		unitA.resetPosture();
+//		unitB.resetPosture();
+//	}
+	
+//	@Override
+//	public void allUnitSelectOrders(){
+//		orderList.clear();
+//		forceA.selectOrders(orderList);
+//		forceB.selectOrders(orderList);
+//		sortOrderList(); //≈≈–Ú
+//	}
+	
+//	@Override
+//	public void allUnitAddToBattle() {
+//		// TODO Auto-generated method stub
+//		unitA.setBattleEnv(this);
+//		unitB.setBattleEnv(this);
+//		
+//		unitA.setEnemys(unitB);
+//		unitB.setEnemys(unitA);
+//	}
+	
+	/*
 	@Override
-	public void setEnemys(){
-		unitA.enemy=unitB;
-		unitB.enemy=unitA;
-	}
-	
-	@Override
-	public void allUnitBuffsDecrement(){
-		unitA.buffsDecrement();
-		unitB.buffsDecrement();
-	}
-	
-	@Override
-	public void allUnitResetPosture(){
-		unitA.resetPosture();
-		unitB.resetPosture();
-	}
-	
-	@Override
-	public void allUnitSelectOrders(){
-		orderList.clear();
-		orderList.add(unitA.selectOrder());
-		orderList.add(unitB.selectOrder());
-		sortOrderList(); //≈≈–Ú
-	}
-	
 	public void handle(){
 		allUnitBuffsDecrement(); //º∆À„Buff
 		allUnitResetPosture(); //÷ÿ÷√◊ÀÃ¨
@@ -88,5 +93,6 @@ public class Battle1V1 extends Battle {
 		System.out.println(unitB);
 		turnCounter++;
 	}
+	*/
 	
 }

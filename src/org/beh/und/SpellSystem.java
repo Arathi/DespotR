@@ -26,27 +26,44 @@ public class SpellSystem {
 	}
 	
 	private static void doHurt(Order order, double min, double max) {
-		Result result=order.createResult(Result.RESULT_TYPE_DAMAGE);
-		int damage = (int)( Util.getRandomReal(min, max) );
-		int delta = order.target.changeHp(-damage);
-		result.value = -delta;
-		order.addResult(result);
+		Result result;
+		Unit target=null;
+		int delta, i;
+		for (i=0; i<order.targets.size(); i++){
+			int damage = (int)( Util.getRandomReal(min, max) );
+			target = order.targets.get(i);
+			result = order.createResult(target, Result.RESULT_TYPE_DAMAGE);
+			delta = target.changeHp(-damage);
+			result.value = -delta;
+			order.addResult(result);
+		}
 	}
 	
 	private static void doHeal(Order order, double min, double max) {
-		Result result=order.createResult(Result.RESULT_TYPE_HEAL);
-		int health = (int)( Util.getRandomReal(min, max) );
-		int delta = order.target.changeHp(health);
-		result.value = delta;
-		order.addResult(result);
+		Unit target = null;
+		int i, delta;
+		for (i=0; i<order.targets.size(); i++){
+			target = order.targets.get(i);
+			int health = (int)( Util.getRandomReal(min, max) );
+			Result result=order.createResult(target, Result.RESULT_TYPE_HEAL);
+			delta = target.changeHp(health);
+			result.value = delta;
+			order.addResult(result);
+		}
 	}
 	
 	private static void doBuff(Order order, int buffId, int min, int max) {
-		Result result=order.createResult(Result.RESULT_TYPE_BUFF);
-		int time = Util.getRandomInt(min, max+1);
-		order.target.setBuff(buffId, time);
-		result.value=buffId;
-		order.addResult(result);
+		Result result;
+		int i, size=order.targets.size();
+		Unit target=null;
+		for (i=0; i<size; i++){
+			target = order.targets.get(i);
+			result=order.createResult(target, Result.RESULT_TYPE_BUFF);
+			int time = Util.getRandomInt(min, max+1);
+			target.setBuff(buffId, time);
+			result.value=buffId;
+			order.addResult(result);
+		}
 	}
 	
 	private static boolean skillProcessFrame(
@@ -54,7 +71,7 @@ public class SpellSystem {
 			SkillInfo skill,
 			boolean ignoreSilence, 
 			boolean ignoreLowMana){
-		Result result = order.createResult(Result.RESULT_TYPE_NONE);
+		Result result = order.createResult(null, Result.RESULT_TYPE_NONE);
 		Unit srcUnit=order.src;
 		//首先，检查有没有处于“沉默”状态
 		if (!ignoreSilence){

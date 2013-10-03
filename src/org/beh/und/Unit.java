@@ -4,7 +4,7 @@ import java.util.*;
 
 import org.beh.und.template.*;
 
-public abstract class Unit {
+public abstract class Unit implements IBattleFlow {
 	// 姿态常量
 	public static final int POSTURE_NONE = 0;
 	public static final int POSTURE_ATTACK = 1;
@@ -30,18 +30,23 @@ public abstract class Unit {
 	protected int[] resistsMax;
 
 	protected Map<Integer, Integer> buffMap;
-	protected Unit enemy;
+	protected IBattleFlow enemys;
 
 	protected int posture;
 	protected boolean fleed;
 
 	protected List<Integer> skills;
+	
+	protected Battle battleEnv; //战斗环境
 
 	public String getName() {
 		return name;
 	}
 
 	public int getAgi() {
+		return agi;
+	}
+	public int getAgiSum(){
 		return agi;
 	}
 
@@ -51,6 +56,14 @@ public abstract class Unit {
 
 	public int getJink() {
 		return jink;
+	}
+	
+	public void setBattleEnv(Battle battle){
+		this.battleEnv=battle;
+	}
+	
+	public Battle getBattleEnv(){
+		return battleEnv;
 	}
 
 	/**
@@ -183,13 +196,12 @@ public abstract class Unit {
 		return real_delta;
 	}
 
-	public abstract Order selectOrder();
-
 	/**
 	 * 检测一个单位是否还能继续战斗
 	 * 
 	 * @return
 	 */
+	@Override
 	public boolean isCanNotBattle() {
 		// TODO 完善“战斗不能”的判断条件
 		if (hp <= 0) { // 单位已经死亡
@@ -204,6 +216,7 @@ public abstract class Unit {
 	/**
 	 * 重置状态
 	 */
+	@Override
 	public void resetPosture() {
 		// TODO 添加睡眠Buff的影响
 		if (checkBuff(SpellSystem.BUFFID_FIXED_SLEEP)){
@@ -227,12 +240,12 @@ public abstract class Unit {
 		Result result = new Result(this, Result.RESULT_TYPE_NONE);
 		double successRate = 0, fleeRand = 1;
 		// 如果敌方不在攻击状态，则逃跑必定成功
-		if (enemy.getPosture() == POSTURE_NONE
-				|| enemy.getPosture() == POSTURE_DEFENCE) {
+		//IBattleFlow enemys = 
+		if ( enemys.isCanNotStopRunning() ) {
 			fleed = true;
 		} else {
 			// 逃跑成功率：总敏捷比例
-			successRate = 1.0 * agi / (1.0 * agi + 1.0 * enemy.getAgi());
+			successRate = 1.0 * agi / (1.0 * agi + 1.0 * enemys.getAgiSum());
 			fleeRand = Util.getRandomReal(0, 1);
 			if (fleeRand <= successRate) {
 				fleed = true;
@@ -341,6 +354,7 @@ public abstract class Unit {
 	/**
 	 * Buff自动减弱
 	 */
+	@Override
 	public void buffsDecrement() {
 		for (Map.Entry<Integer, Integer> entry : buffMap.entrySet()) {
 			int buffId = entry.getKey();
@@ -361,5 +375,44 @@ public abstract class Unit {
 	public int getAtk() {
 		return atk;
 	}
+	@Override
+	public int getAtkSum() {
+		// TODO Auto-generated method stub
+		return atk;
+	}
 
+	@Override
+	public void setBattleEnvForAll(Battle battle) {
+		// TODO Auto-generated method stub
+		battleEnv=battle;
+	}
+	
+	@Override
+	public boolean isCanNotStopRunning(){
+		//睡着了、防御状态下，无法阻止逃跑
+		if (checkBuff(SpellSystem.BUFFID_FIXED_SLEEP)){
+			return true;
+		}
+		if (posture==POSTURE_DEFENCE){
+			return true;
+		}
+		return false;
+	}
+	
+	@Override
+	public void setEnemys(IBattleFlow u) {
+		// TODO Auto-generated method stub
+		enemys=u;
+	}
+	
+	@Override
+	public Unit getSingleUnit(int rule){
+		return this;
+	}
+	@Override
+	public List<Unit> getAllUnits(int rule){
+		List<Unit> targets=new ArrayList<Unit>();
+		targets.add(this);
+		return targets;
+	}
 }
