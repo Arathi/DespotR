@@ -21,24 +21,39 @@ public class Force implements IBattleFlow {
 	@Override
 	public void selectOrders(List<Order> orderList) {
 		// TODO Auto-generated method stub
-		
+		int i;
+		for (i=0; i<units.size(); i++){
+			Unit u = units.get(i);
+			if (u!=null && u.isCanNotBattle()==false)
+				u.selectOrders(orderList);
+		}
 	}
 	
 	@Override
 	public void resetPosture() {
 		// TODO Auto-generated method stub
-		
+		int i;
+		for (i=0; i<units.size(); i++){
+			Unit u = units.get(i);
+			if (u!=null && u.isCanNotBattle()==false)
+				u.resetPosture();
+		}
 	}
 	
 	@Override
 	public void buffsDecrement() {
 		// TODO Auto-generated method stub
-		
+		int i;
+		for (i=0; i<units.size(); i++){
+			Unit u = units.get(i);
+			if (u!=null && u.isCanNotBattle()==false)
+				u.buffsDecrement();
+		}		
 	}
 	
 	@Override
 	public boolean isCanNotBattle() {
-		//改组所有单位都战斗不能时，返回true
+		//该组所有单位都战斗不能时，返回true
 		boolean ret=true;
 		int i;
 		for (i=0; i<units.size(); i++){
@@ -51,7 +66,6 @@ public class Force implements IBattleFlow {
 
 	@Override
 	public void setBattleEnvForAll(Battle battle) {
-		// TODO Auto-generated method stub
 		int i, size=units.size();
 		for (i=0; i<size; i++){
 			Unit u = units.get(i);
@@ -101,7 +115,6 @@ public class Force implements IBattleFlow {
 	
 	@Override
 	public void setEnemys(IBattleFlow f) {
-		// TODO Auto-generated method stub
 		enemyForce=(Force) f;
 		int i, size=units.size();
 		for (i=0; i<size; i++){

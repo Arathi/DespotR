@@ -1,8 +1,15 @@
 package org.beh.und;
 
 public class BattleNVN extends Battle {
-//	protected Force forceA;
-//	protected Force forceB;
+	
+	public BattleNVN(Force a, Force b){
+		//addToForceA(a);
+		//addToForceB(b);
+		forceA=a;
+		forceB=b;
+
+		init();
+	}
 	
 	@Override
 	public void addToForceA(Unit u){
@@ -16,23 +23,4 @@ public class BattleNVN extends Battle {
 		((Force) forceB).addUnit(u);
 	}
 	
-//	@Override
-//	public void allUnitSelectOrders() {
-//		forceA.selectOrders(orderList);
-//		forceB.selectOrders(orderList);
-//	}
-	
-//	@Override
-//	public void allUnitResetPosture() {
-//		forceA.resetPosture();
-//		forceB.resetPosture();
-//	}
-//	
-//	@Override
-//	public void allUnitBuffsDecrement() {
-//		forceA.buffsDecrement();
-//		forceB.buffsDecrement();
-//	}
-
-
 }

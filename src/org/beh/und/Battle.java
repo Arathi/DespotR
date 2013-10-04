@@ -12,11 +12,6 @@ public abstract class Battle {
 	public abstract void addToForceA(Unit u);
 	public abstract void addToForceB(Unit u);
 	
-//	public void setEnemys(){
-//		forceA.setEnemys(forceB);
-//		forceB.setEnemys(forceA);
-//	}
-	
 	public void init(){
 		orderList=new ArrayList<Order>();
 		end=false;
@@ -75,11 +70,6 @@ public abstract class Battle {
 		System.out.println(forceB);
 		turnCounter++;
 	}
-	
-//	public abstract void allUnitSelectOrders();
-//	public abstract void allUnitResetPosture();
-//	public abstract void allUnitBuffsDecrement();
-//	public abstract void allUnitAddToBattle();
 	
 	public void allUnitBuffsDecrement(){
 		forceA.buffsDecrement();
